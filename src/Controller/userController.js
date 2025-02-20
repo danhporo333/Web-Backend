@@ -38,8 +38,15 @@ const Login = async (req, res) => {
         return res.status(200).json({
             errorCode: 0,
             message: 'Đăng nhập thành công',
-            token,
-            user: { id: user.id, email: user.email, name: user.name }
+            data: {
+                token,
+                user: {
+                    id: user.id,
+                    email: user.email,
+                    name: user.name
+                }
+            },
+
         });
     } catch (error) {
         return res.status(400).json({

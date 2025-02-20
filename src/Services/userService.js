@@ -45,8 +45,6 @@ const loginUser = async (email, password) => {
 };
 
 
-
-
 module.exports = {
     createUserService, loginUser
 }
