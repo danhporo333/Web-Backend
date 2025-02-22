@@ -1,10 +1,19 @@
 const connection = require('../Config/database');
 
-const createProduct = async (id, name, description, price, stock_quantity, category_id, image_id) => {
+const createProduct = async (productData) => {
     try {
         const [result] = await connection.execute(
-            `INSERT INTO product (id, name, description, price, stock_quantity, category_id, image_id) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-            [id, name, description, price, stock_quantity, category_id, image_id]
+            `INSERT INTO product (id, name, description, price, stock_quantity, category_id, image) 
+             VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [
+                productData.id,
+                productData.name,
+                productData.description,
+                productData.price,
+                productData.stock_quantity,
+                productData.category_id,
+                productData.image
+            ]
         );
         return result;
     } catch (error) {
@@ -13,22 +22,20 @@ const createProduct = async (id, name, description, price, stock_quantity, categ
     }
 };
 
-// const getAllProducts = async () => {
-//     try {
-//         const [rows] = await db.execute(`
-//             SELECT p.id, p.name, p.description, p.price, p.stock_quantity, 
-//                    c.name AS category_name, f.path AS image_path
-//             FROM product p
-//             LEFT JOIN category c ON p.category_id = c.id
-//             LEFT JOIN files f ON p.image_id = f.id
-//         `);
-//         return rows;
-//     } catch (error) {
-//         console.error("Lỗi khi lấy danh sách sản phẩm:", error);
-//         throw error;
-//     }
-// };
+
+const getAllProducts = async () => {
+    try {
+        const [rows] = await connection.execute(
+            `SELECT * FROM product`
+        );
+        return rows;
+    } catch (error) {
+        console.error("Lỗi khi lấy danh sách sản phẩm:", error);
+        throw error;
+    }
+};
+
 
 module.exports = {
-    createProduct
+    createProduct, getAllProducts
 }

@@ -1,11 +1,17 @@
 require('dotenv').config();
 const express = require('express'); //commonjs
 const cors = require("cors");
+const path = require("path");
 const apiRoutes = require('./Routes/api');
-
+const fileUpload = require('express-fileupload');
 const app = express();// app express
 const port = process.env.PORT || 8888; //port => hardcode . uat .prod
 const hostname = process.env.HOST_NAME;
+
+
+//config file upload
+app.use(fileUpload());
+app.use("/image", express.static(path.join(__dirname, "public/image")));
 
 //config req.body
 app.use(cors());//Cho phép tất cả nguồn gọi API
