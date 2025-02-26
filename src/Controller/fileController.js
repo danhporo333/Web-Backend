@@ -1,6 +1,7 @@
-const { uploadSingleFile } = require('../Services/fileService')
+// const { uploadSingleFile } = require('../Services/fileService')
+import { uploadSingleFile } from '../Services/fileService.js';
 
-const postUploadSingleFileApi = async (req, res) => {
+export const postUploadSingleFileApi = async (req, res) => {
 
     if (!req.files || Object.keys(req.files).length === 0) {
         return res.status(400).send('No files were uploaded.');
@@ -17,4 +18,4 @@ const postUploadSingleFileApi = async (req, res) => {
     )
 }
 
-module.exports = postUploadSingleFileApi;
+// module.exports = postUploadSingleFileApi;

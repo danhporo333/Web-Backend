@@ -1,11 +1,12 @@
 require('dotenv').config();
-const express = require('express'); //commonjs
-const cors = require("cors");
-const path = require("path");
-const apiRoutes = require('./Routes/api');
-const fileUpload = require('express-fileupload');
-const app = express();// app express
-const port = process.env.PORT || 8888; //port => hardcode . uat .prod
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import apiRoutes from './Routes/api.js';
+import fileUpload from 'express-fileupload';
+
+const app = express();
+const port = process.env.PORT || 8888;
 const hostname = process.env.HOST_NAME;
 
 

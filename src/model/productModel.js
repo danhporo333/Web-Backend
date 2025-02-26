@@ -1,4 +1,5 @@
-const connection = require('../Config/database');
+// const connection = require('../Config/database');
+import connection from '../Config/database.js';
 
 const createProduct = async (productData) => {
     try {

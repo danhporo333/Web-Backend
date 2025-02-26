@@ -1,6 +1,7 @@
-const createCategory = require('../model/category');
+// const createCategory = require('../model/category'); 
+import { createCategory } from '../model/category.js';
 
-const addCategory = async (req, res) => {
+export const addCategory = async (req, res) => {
     try {
         const { name, description, parent_id, image } = req.body;
 
@@ -24,4 +25,4 @@ const addCategory = async (req, res) => {
     }
 };
 
-module.exports = addCategory;
+// module.exports = addCategory;

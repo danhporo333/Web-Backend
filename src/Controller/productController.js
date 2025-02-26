@@ -1,9 +1,13 @@
-const path = require("path");
-const { v4: uuidv4 } = require("uuid");
-const { uploadSingleFile } = require('../Services/fileService')
-const productService = require('../Services/productService');
+// const path = require("path");
+import path from "path";
+import { v4 as uuidv4 } from "uuid";
+import { uploadSingleFile } from '../Services/fileService.js'
+import productService from '../Services/productService.js';
+// const { v4: uuidv4 } = require("uuid");
+// const { uploadSingleFile } = require('../Services/fileService')
+// const productService = require('../Services/productService');
 
-const addProduct = async (req, res) => {
+export const addProduct = async (req, res) => {
     try {
         const { name, description, price, stock_quantity, category_id } = req.body;
         // console.log("Request body: ", req.body);
@@ -41,7 +45,7 @@ const addProduct = async (req, res) => {
     }
 };
 
-const getAllProducts = async (req, res) => {
+export const getAllProducts = async (req, res) => {
     try {
         let productall = await productService.getAllProductService();
         // console.log('check product', productall)
@@ -54,6 +58,8 @@ const getAllProducts = async (req, res) => {
     }
 }
 
-module.exports = {
-    addProduct, getAllProducts
-};
+
+
+// module.exports = {
+//     addProduct, getAllProducts
+// };

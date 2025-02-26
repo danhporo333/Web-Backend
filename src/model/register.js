@@ -1,5 +1,7 @@
-const connection = require('../Config/database');
-const crypto = require('crypto');
+// const connection = require('../Config/database');
+import connection from '../Config/database.js';
+// const crypto = require('crypto');
+import crypto from 'crypto';
 
 const createUser = async (email, name, password) => {
     try {

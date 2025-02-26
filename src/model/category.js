@@ -1,5 +1,7 @@
-const connection = require('../Config/database');
-const { v4: uuidv4 } = require("uuid");
+// const connection = require('../Config/database');
+import connection from "../Config/database.js";
+// const { v4: uuidv4 } = require("uuid");
+import { v4 as uuidv4 } from "uuid";
 
 const createCategory = async (name, description, parent_id, image) => {
     try {
