@@ -11,8 +11,8 @@ const hostname = process.env.HOST_NAME;
 
 
 //config file upload
-// app.use(fileUpload());
-// app.use("/image", express.static(path.join(__dirname, "public/image")));
+app.use(fileUpload());
+app.use("/image", express.static(path.join(__dirname, "Public/image")));
 
 //config req.body
 app.use(cors());//Cho phép tất cả nguồn gọi API
