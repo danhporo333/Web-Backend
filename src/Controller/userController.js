@@ -1,86 +1,100 @@
+import { loginUser, createUsers, getAllUsers, deleteUser, updateUser } from "../Services/userService.js";
 
-// const { createUserService, loginUser } = require("../Services/userService");
-import { createUserService, loginUser } from "../Services/userService.js";
 
-// const createUser = async (req, res) => {
-//     // console.log("check req.body ", req.body);
-//     const { name, email, password } = req.body;
 
-//     try {
-//         // Gọi service để tạo người dùng
-//         const result = await createUserService(name, email, password);
-//         console.log("data: ", result);
-//         // Trả về phản hồi thành công
-//         return res.status(200).json({
-//             errorCode: 0,
-//             message: 'Đăng ký thành công!',
-//             user: {
-//                 email: email,
-//                 name: name,
-//                 password: password
-//             }
-//         });
-//     } catch (error) {
-//         console.error("Lỗi khi đăng ký:", error);
-//         return res.status(500).json({
-//             errorCode: 2,
-//             message: 'Lỗi máy chủ! Không thể tạo người dùng.'
-//         });
-//     }
-
-// }
-
-export const createUser = async (req, res) => {
-    const { name, email, password } = req.body;
-
+export const createUserController = async (req, res) => {
+    const { email, username, password } = req.body;
     try {
-        const result = await createUserService(name, email, password);
-        console.log("data: ", result);
-        return res.status(200).json({
+        const result = await createUsers(email, username, password);
+        return res.status(201).json({
             errorCode: 0,
-            message: 'Đăng ký thành công!',
+            message: 'User created successfully!',
             user: {
                 email: email,
-                name: name,
-                password: password
+                username: username,
+                password: result.password
             }
         });
     } catch (error) {
-        console.error("Lỗi khi đăng ký:", error);
+        console.error("Error creating user:", error);
         return res.status(500).json({
-            errorCode: 2,
-            message: 'Lỗi máy chủ! Không thể tạo người dùng.'
+            errorCode: 1,
+            message: 'Server error! Unable to create user.'
         });
     }
-}
+};
 
-export const Login = async (req, res) => {
+export const getAllUsersController = async (req, res) => {
     try {
-        const { email, password } = req.body;
-        const { token, user } = await loginUser(email, password);
-
+        const users = await getAllUsers();
+        const userCount = users.length;
         return res.status(200).json({
             errorCode: 0,
-            message: 'Đăng nhập thành công',
+            message: 'Success!',
             data: {
-                token,
-                user: {
-                    id: user.id,
-                    email: user.email,
-                    name: user.name
-                }
-            },
+                userCount: userCount,
+                users: users
+            }
         });
     } catch (error) {
-        return res.status(400).json({
+        console.error("Error getting all users:", error);
+        return res.status(500).json({
             errorCode: 1,
-            message: error.message
+            message: 'Server error! Unable to get all users.'
+        });
+    }
+};
+
+export const deleteUserController = async (req, res) => {
+    try {
+        const { id } = req.body;
+        const result = await deleteUser(id);
+        if (result === 0) {
+            return res.status(404).json({
+                errorCode: 1,
+                message: 'User not found!'
+            });
+        }
+        return res.status(200).json({
+            errorCode: 0,
+            message: 'User deleted successfully!',
+            data: result
+        });
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        return res.status(500).json({
+            errorCode: 1,
+            message: 'Server error! Unable to delete user.'
         });
     }
 }
 
-// const Login = async (req, res) => {
+export const updateUserController = async (req, res) => {
+    try {
+        const { id } = req.body;
+        const updatedData = req.body;
+        const result = await updateUser(id, updatedData);
+        if (result[0] === 0) {
+            return res.status(404).json({
+                errorCode: 1,
+                message: 'User not found!'
+            });
+        }
+        return res.status(200).json({
+            errorCode: 0,
+            message: 'User updated successfully!',
+            data: result
+        });
+    } catch (error) {
+        console.error("Error updating user:", error);
+        return res.status(500).json({
+            errorCode: 1,
+            message: 'Server error! Unable to update user.'
+        });
+    }
+};
 
+// export const Login = async (req, res) => {
 //     try {
 //         const { email, password } = req.body;
 //         const { token, user } = await loginUser(email, password);
@@ -96,7 +110,6 @@ export const Login = async (req, res) => {
 //                     name: user.name
 //                 }
 //             },
-
 //         });
 //     } catch (error) {
 //         return res.status(400).json({
@@ -104,8 +117,4 @@ export const Login = async (req, res) => {
 //             message: error.message
 //         });
 //     }
-// }
-
-// module.exports = {
-//     createUser, Login
 // }
