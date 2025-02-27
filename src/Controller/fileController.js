@@ -10,7 +10,6 @@ export const uploadFileController = async (req, res) => {
         }
 
         let result = await uploadSingleFile(req.files.image);
-        console.log("check result =", result)
 
         return res.status(200).json(
             {
