@@ -1,43 +1,40 @@
-// const express = require('express');
-// const routerAPI = express.Router();
 import express from 'express';
 const routerAPI = express.Router();
-
-// const { createUser, Login } = require('../Controller/userController');
 import {
     createUser, Login, createUserController,
     getAllUsersController, deleteUserController,
     updateUserController
 } from "../Controller/userController.js";
 import { uploadFileController } from "../Controller/fileController.js";
-// const { addProduct, getAllProducts } = require('../Controller/productController');
-// import { addProduct, getAllProducts } from "../Controller/productController.js";
-// const addCategory = require("../Controller/categoryController");
-// import { addCategory } from "../Controller/categoryController.js";
-// const postUploadSingleFileApi = require("../Controller/fileController");
-// import { postUploadSingleFileApi } from "../Controller/fileController.js";
+import {
+    createCategoryController, getAllCategoriesController,
+    deleteCategoryController, updateCategoryController
+} from "../Controller/categoryController.js";
 
-
+import {
+    createProductController, getAllProductsController,
+    deleteProductController, updateProductController
+} from "../Controller/productController.js";
 // routerAPI.post('/register', createUser);
-
 // routerAPI.post('/login', Login);
 
-// routerAPI.post('/product', addProduct);
+// Api cho category
+routerAPI.post("/category", createCategoryController);
+routerAPI.get('/category-all', getAllCategoriesController);
+routerAPI.delete('/delete-category', deleteCategoryController);
+routerAPI.put('/update', updateCategoryController);
 
-// routerAPI.post("/category", addCategory);
+//api cho product
+routerAPI.post('/product', createProductController);
+routerAPI.get('/product-all', getAllProductsController);
+routerAPI.delete('/delete-product', deleteProductController);
+routerAPI.put('/update-product', updateProductController);
 
-// routerAPI.post('/file', postUploadSingleFileApi);
-
-// routerAPI.get('/product-all', getAllProducts);
-
+//Ai cho user
 routerAPI.post('/register', createUserController);
-
 routerAPI.get('/user-all', getAllUsersController);
-
-routerAPI.delete('/delete', deleteUserController);
-
+routerAPI.delete('/delete-user', deleteUserController);
 routerAPI.put('/update', updateUserController);
-
 routerAPI.post('/file', uploadFileController);
 
 module.exports = routerAPI; 

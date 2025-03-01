@@ -3,16 +3,28 @@ import { loginUser, createUsers, getAllUsers, deleteUser, updateUser } from "../
 
 
 export const createUserController = async (req, res) => {
-    const { email, username, password } = req.body;
+    const { email, username, password, phone } = req.body;
     try {
-        const result = await createUsers(email, username, password);
+        if (!email || !username || !password || !phone) {
+            return res.status(400).json({
+                errorCode: 1,
+                message: 'Vui lòng điền đầy đủ thông tin bắt buộc!'
+            });
+        }
+        const result = await createUsers(email, username, password, phone);
+        if (result.status === 'error') {
+            return res.status(400).json({
+                errorCode: 1,
+                message: result.message
+            });
+        }
         return res.status(201).json({
             errorCode: 0,
             message: 'User created successfully!',
             user: {
                 email: email,
                 username: username,
-                password: result.password
+                phone: phone
             }
         });
     } catch (error) {

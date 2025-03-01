@@ -5,7 +5,10 @@
     "database": "Web",
     "host": "127.0.0.1",
     "port": "3307",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "charset": "utf8mb4",
+    "collate": "utf8mb4_unicode_ci",
+    "logging": false
   },
   "test": {
     "username": "root",
@@ -13,7 +16,9 @@
     "database": "database_test",
     "host": "127.0.0.1",
     "port": "3307",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "charset": "utf8mb4",
+    "collate": "utf8mb4_unicode_ci"
   },
   "production": {
     "username": "root",
@@ -21,6 +26,8 @@
     "database": "database_production",
     "host": "127.0.0.1",
     "port": "3307",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "charset": "utf8mb4",
+    "collate": "utf8mb4_unicode_ci"
   }
 }

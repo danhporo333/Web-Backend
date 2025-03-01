@@ -4,19 +4,43 @@ import bcrypt from 'bcrypt';
 import db from '../model/index.js';
 const saltRounds = 10;
 
+//check người dùng trong hệ thống
+const checkExistingUser = async (email, username) => {
+    const existingUsers = await db.User.findAll({
+        where: {
+            [db.Sequelize.Op.or]: [
+                { email: email },
+                { username: username }
+            ]
+        }
+    });
 
-export const createUsers = async (email, username, password) => {
+    if (existingUsers.length > 0) {
+        const errors = [];
+        existingUsers.forEach(user => {
+            if (user.email === email) errors.push("Email đã được sử dụng");
+            if (user.username === username) errors.push("Tên người dùng đã được sử dụng");
+        });
+        throw new Error(errors.join(" và "));
+    }
+};
+
+export const createUsers = async (email, username, password, phone) => {
     try {
+        await checkExistingUser(email, username);
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         const user = await db.User.create({
-            email: email,
-            username: username,
-            password: hashedPassword
+            email,
+            username,
+            password: hashedPassword,
+            phone
         });
         return user;
     } catch (error) {
-        console.error("Error in service:", error);
-        throw error;
+        return {
+            status: 'error',
+            message: error.message
+        };
     }
 };
 
