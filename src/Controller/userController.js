@@ -1,9 +1,13 @@
-import { loginUser, createUsers, getAllUsers, deleteUser, updateUser } from "../Services/userService.js";
+import {
+    loginUser, createUsers,
+    getAllUsers, deleteUser,
+    updateUser, assignRoleToUser
+} from "../Services/userService.js";
 
 
 
 export const createUserController = async (req, res) => {
-    const { email, username, password, phone } = req.body;
+    const { email, username, password, phone, role } = req.body;
     try {
         if (!email || !username || !password || !phone) {
             return res.status(400).json({
@@ -18,13 +22,19 @@ export const createUserController = async (req, res) => {
                 message: result.message
             });
         }
+
+        if (role) {
+            await assignRoleToUser(result.id, role);
+        }
+
         return res.status(201).json({
             errorCode: 0,
             message: 'User created successfully!',
             user: {
                 email: email,
                 username: username,
-                phone: phone
+                phone: phone,
+                role: role
             }
         });
     } catch (error) {
@@ -59,7 +69,7 @@ export const getAllUsersController = async (req, res) => {
 
 export const deleteUserController = async (req, res) => {
     try {
-        const { id } = req.body;
+        const { id } = req.params;
         const result = await deleteUser(id);
         if (result === 0) {
             return res.status(404).json({
@@ -70,7 +80,9 @@ export const deleteUserController = async (req, res) => {
         return res.status(200).json({
             errorCode: 0,
             message: 'User deleted successfully!',
-            data: result
+            data: {
+                userCount: result,
+            }
         });
     } catch (error) {
         console.error("Error deleting user:", error);

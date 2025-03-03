@@ -15,6 +15,11 @@ import {
     createProductController, getAllProductsController,
     deleteProductController, updateProductController
 } from "../Controller/productController.js";
+
+import {
+    createRoleController, getAllRolesController,
+    deleteRoleController, updateRoleController
+} from "../Controller/roleController.js";
 // routerAPI.post('/register', createUser);
 // routerAPI.post('/login', Login);
 
@@ -22,7 +27,7 @@ import {
 routerAPI.post("/category", createCategoryController);
 routerAPI.get('/category-all', getAllCategoriesController);
 routerAPI.delete('/delete-category', deleteCategoryController);
-routerAPI.put('/update', updateCategoryController);
+routerAPI.put('/update-category', updateCategoryController);
 
 //api cho product
 routerAPI.post('/product', createProductController);
@@ -30,11 +35,17 @@ routerAPI.get('/product-all', getAllProductsController);
 routerAPI.delete('/delete-product', deleteProductController);
 routerAPI.put('/update-product', updateProductController);
 
-//Ai cho user
+//Api cho user
 routerAPI.post('/register', createUserController);
 routerAPI.get('/user-all', getAllUsersController);
-routerAPI.delete('/delete-user', deleteUserController);
-routerAPI.put('/update', updateUserController);
+routerAPI.delete('/delete-user/:id', deleteUserController);
+routerAPI.put('/update-user', updateUserController);
 routerAPI.post('/file', uploadFileController);
+
+//Api cho role
+routerAPI.post('/create-role', createRoleController);
+routerAPI.get('/role-all', getAllRolesController);
+routerAPI.delete('/delete-role', deleteRoleController);
+routerAPI.put('/update-role', updateRoleController);
 
 module.exports = routerAPI; 
