@@ -1,6 +1,6 @@
 require('dotenv').config();
 import bcrypt from 'bcrypt';
-// import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import db from '../model/index.js';
 import Model from 'sequelize/lib/model';
 const saltRounds = 10;
@@ -65,32 +65,49 @@ export const createUsers = async (email, username, password, phone) => {
     }
 };
 
-// export const loginUser = async (email, password) => {
-//     try {
-//         const user = await db.User.findOne({ where: { email } });
+export const loginUser = async (email, password) => {
+    try {
+        const user = await db.User.findOne({
+            where: { email },
+            include: [{
+                model: db.Role,
+                attributes: ['name'],
+                through: { attributes: [] }
+            }]
+        });
 
-//         if (!user) {
-//             throw new Error("Email không tồn tại!");
-//         }
+        if (!user) {
+            throw new Error("Thông tin đăng nhập không chính xác!");
+        }
 
-//         const isPasswordValid = await bcrypt.compare(password, user.password);
-//         if (!isPasswordValid) {
-//             throw new Error("Mật khẩu không chính xác!");
-//         }
-//         if (!process.env.JWT_SECRET) {
-//             throw new Error("JWT_SECRET không được định nghĩa! Kiểm tra file .env của bạn.");
-//         }
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            throw new Error("Thông tin đăng nhập không chính xác!");
+        }
+        if (!process.env.JWT_SECRET) {
+            throw new Error("JWT_SECRET không được định nghĩa! Kiểm tra file .env của bạn.");
+        }
 
-//         const token = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET, {
-//             expiresIn: '1h',
-//         });
+        const token = jwt.sign(
+            {
+                userId: user.id,
+                email: user.email,
+                username: user.username,
+                roles: user.Roles.map(role => role.name) // add role in the token
+            }, process.env.JWT_SECRET,
+            {
+                expiresIn: process.env.JWT_EXPIRE,
+            }
+        );
 
-//         return { token, user };
-//     } catch (error) {
-//         console.error("Lỗi trong service:", error);
-//         throw error;
-//     }
-// };
+        // Lấy thông tin về vai trò của người dùng
+        const roles = user.Roles.map(role => role.name);
+        return { token, user, roles };
+    } catch (error) {
+        console.error("Lỗi trong service:", error);
+        throw error;
+    }
+};
 
 export const getAllUsers = async () => {
     try {
@@ -122,11 +139,38 @@ export const deleteUser = async (id) => {
 
 export const updateUser = async (id, updatedData) => {
     try {
-        const result = await db.User.update(updatedData, {
+        // Tách role ra khỏi updatedData nếu có
+        const { role, ...userData } = updatedData;
+
+        // Cập nhật thông tin người dùng
+        const result = await db.User.update(userData, {
             where: {
                 id: id
             }
         });
+
+        // Nếu có role trong updatedData, cập nhật vai trò của người dùng
+        if (role) {
+            const user = await db.User.findByPk(id);
+            if (!user) {
+                throw new Error("User not found!");
+            }
+
+            const roleRecord = await db.Role.findOne({ where: { name: role } });
+            if (!roleRecord) {
+                throw new Error("Role not found!");
+            }
+
+            // Xóa các vai trò hiện tại của người dùng
+            await db.UserRole.destroy({ where: { userId: id } });
+
+            // Gán vai trò mới cho người dùng
+            await db.UserRole.create({
+                userId: id,
+                roleId: roleRecord.id
+            });
+        }
+
         return result;
     } catch (error) {
         console.error("Error in service:", error);

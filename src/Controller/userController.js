@@ -3,7 +3,7 @@ import {
     getAllUsers, deleteUser,
     updateUser, assignRoleToUser
 } from "../Services/userService.js";
-
+import db from '../model/index.js';
 
 
 export const createUserController = async (req, res) => {
@@ -98,16 +98,37 @@ export const updateUserController = async (req, res) => {
         const { id } = req.body;
         const updatedData = req.body;
         const result = await updateUser(id, updatedData);
+
         if (result[0] === 0) {
             return res.status(404).json({
                 errorCode: 1,
                 message: 'User not found!'
             });
         }
+
+        // Lấy thông tin người dùng sau khi cập nhật
+        const updatedUser = await db.User.findByPk(id, {
+            include: [{
+                model: db.Role,
+                attributes: ['name'],
+                through: { attributes: [] }
+            }]
+        });
+
+        // Chuyển đổi thông tin vai trò thành mảng các tên vai trò
+        const roles = updatedUser.Roles.map(role => role.name);
+
         return res.status(200).json({
             errorCode: 0,
             message: 'User updated successfully!',
-            data: result
+            data: {
+                user: {
+                    email: updatedUser.email,
+                    username: updatedUser.username,
+                    phone: updatedUser.phone,
+                    roles: roles
+                }
+            }
         });
     } catch (error) {
         console.error("Error updating user:", error);
@@ -118,27 +139,28 @@ export const updateUserController = async (req, res) => {
     }
 };
 
-// export const Login = async (req, res) => {
-//     try {
-//         const { email, password } = req.body;
-//         const { token, user } = await loginUser(email, password);
+export const Login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const { token, user, roles } = await loginUser(email, password);
 
-//         return res.status(200).json({
-//             errorCode: 0,
-//             message: 'Đăng nhập thành công',
-//             data: {
-//                 token,
-//                 user: {
-//                     id: user.id,
-//                     email: user.email,
-//                     name: user.name
-//                 }
-//             },
-//         });
-//     } catch (error) {
-//         return res.status(400).json({
-//             errorCode: 1,
-//             message: error.message
-//         });
-//     }
-// }
+        return res.status(200).json({
+            errorCode: 0,
+            message: 'Đăng nhập thành công',
+            data: {
+                token,
+                user: {
+                    id: user.id,
+                    email: user.email,
+                    username: user.username,
+                    role: roles
+                }
+            },
+        });
+    } catch (error) {
+        return res.status(400).json({
+            errorCode: 1,
+            message: error.message
+        });
+    }
+}

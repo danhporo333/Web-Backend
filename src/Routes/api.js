@@ -20,8 +20,11 @@ import {
     createRoleController, getAllRolesController,
     deleteRoleController, updateRoleController
 } from "../Controller/roleController.js";
+
+import { verifyTokenController } from "../Controller/authController.js";
 // routerAPI.post('/register', createUser);
-// routerAPI.post('/login', Login);
+routerAPI.post('/login', Login);
+routerAPI.get('/verify-token', verifyTokenController);
 
 // Api cho category
 routerAPI.post("/category", createCategoryController);
