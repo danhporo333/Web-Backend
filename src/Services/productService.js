@@ -28,6 +28,21 @@ export const getAllProducts = async () => {
     }
 }
 
+export const getProductById = async (id) => {
+    try {
+        const product = await db.Product.findByPk(id, {
+            include: [{
+                model: db.Category,
+                attributes: ['name']
+            }]
+        });
+        return product;
+    } catch (error) {
+        console.error("Error in service:", error);
+        throw error;
+    }
+}
+
 export const deleteProduct = async (id) => {
     try {
         const result = await db.Product.destroy({

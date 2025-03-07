@@ -13,7 +13,7 @@ import {
 
 import {
     createProductController, getAllProductsController,
-    deleteProductController, updateProductController
+    getProductByIdController, deleteProductController, updateProductController
 } from "../Controller/productController.js";
 
 import {
@@ -35,6 +35,7 @@ routerAPI.put('/update-category', updateCategoryController);
 //api cho product
 routerAPI.post('/product', createProductController);
 routerAPI.get('/product-all', getAllProductsController);
+routerAPI.get('/product/:id', getProductByIdController);
 routerAPI.delete('/delete-product', deleteProductController);
 routerAPI.put('/update-product', updateProductController);
 
@@ -51,4 +52,4 @@ routerAPI.get('/role-all', getAllRolesController);
 routerAPI.delete('/delete-role', deleteRoleController);
 routerAPI.put('/update-role', updateRoleController);
 
-module.exports = routerAPI; 
+module.exports = routerAPI;

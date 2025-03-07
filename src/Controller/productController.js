@@ -1,32 +1,27 @@
 import path from 'path';
 import fs from 'fs';
 import { uploadSingleFile } from '../Services/fileService.js';
-import { createProduct, getAllProducts, deleteProduct, updateProduct } from '../Services/productService.js';
-import e from 'express';
+import { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct } from '../Services/productService.js';
 
 export const createProductController = async (req, res) => {
-
     try {
         const { name, description, stock, price, categoryId } = req.body;
-
         let imageUrl = "";
 
         if (!req.files || Object.keys(req.files).length === 0) {
-
+            imageUrl = "";
         } else {
             let result = await uploadSingleFile(req.files.image);
             imageUrl = result.name;
         }
 
         const productData = { name, description, stock, price, categoryId, image: imageUrl };
-
         const product = await createProduct(productData);
         return res.status(201).json({
             errorCode: 0,
             message: 'Product created successfully!',
             product: product
         });
-        // return res.send("creat a product");
     } catch (error) {
         console.error("Error creating product:", error);
         return res.status(500).json({
@@ -54,6 +49,30 @@ export const getAllProductsController = async (req, res) => {
         return res.status(500).json({
             errorCode: 1,
             message: 'Server error! Unable to get all products.'
+        });
+    }
+}
+
+export const getProductByIdController = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const product = await getProductById(id);
+        if (!product) {
+            return res.status(404).json({
+                errorCode: 1,
+                message: 'Product not found!'
+            });
+        }
+        return res.status(200).json({
+            errorCode: 0,
+            message: 'Success!',
+            product: product
+        });
+    } catch (error) {
+        console.error("Error getting product by id:", error);
+        return res.status(500).json({
+            errorCode: 1,
+            message: 'Server error! Unable to get product by id.'
         });
     }
 }
