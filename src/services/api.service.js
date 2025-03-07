@@ -70,6 +70,15 @@ const getAccountAPI = () => {
     return axios.get(URL_BACKEND);
 }
 
+const fetchAllProductsAPI = () => {
+    const URL_BACKEND = "/v2/api/product-all";
+    return axios.get(URL_BACKEND);
+}
+
+const fetchProductByIdAPI = (id) => {
+    const URL_BACKEND = `/v2/api/product/${id}`;
+    return axios.get(URL_BACKEND);
+}
 
 export {
     createUserAPI,
@@ -79,5 +88,7 @@ export {
     handleUploadFile,
     fetchAllRoleAPI,
     loginApi,
-    getAccountAPI
+    getAccountAPI,
+    fetchAllProductsAPI,
+    fetchProductByIdAPI
 }

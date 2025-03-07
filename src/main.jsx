@@ -1,4 +1,3 @@
-// import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import {
@@ -10,9 +9,11 @@ import RegisterPage from './pages/Admin/register.jsx';
 import UserPage from './pages/Admin/user.jsx';
 import BookPage from './pages/Admin/book.jsx';
 import './styles/global.css';
-import TodoApp from './components/todo/TodoApp.jsx';
+// import TodoApp from './components/todo/TodoApp.jsx';
 import ErrorPage from './pages/Admin/error.jsx';
 import { AuthWrapper } from './components/context/auth.context.jsx';
+import HomePage from './pages/home.jsx';
+import ProductDetail from './pages/productDetail.jsx';
 
 const router = createBrowserRouter([
   {
@@ -22,7 +23,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <TodoApp />
+        element: <HomePage />
       },
       {
         path: "/users",
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: "/books",
         element: <BookPage />
+      },
+      {
+        path: "/product/:id",
+        element: <ProductDetail />
       }
     ]
   },
@@ -45,9 +50,7 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  // <React.StrictMode>
   <AuthWrapper>
     <RouterProvider router={router} />
   </AuthWrapper>
-  // </React.StrictMode>,
 )
