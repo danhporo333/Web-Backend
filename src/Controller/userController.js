@@ -55,7 +55,7 @@ export const getAllUsersController = async (req, res) => {
             message: 'Success!',
             data: {
                 userCount: userCount,
-                users: users
+                user: users
             }
         });
     } catch (error) {

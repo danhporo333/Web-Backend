@@ -72,7 +72,6 @@ export const loginUser = async (email, password) => {
             include: [{
                 model: db.Role,
                 attributes: ['name'],
-                through: { attributes: [] }
             }]
         });
 

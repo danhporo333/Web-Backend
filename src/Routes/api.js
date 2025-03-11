@@ -21,7 +21,13 @@ import {
     deleteRoleController, updateRoleController
 } from "../Controller/roleController.js";
 
-import { verifyTokenController } from "../Controller/authController.js";
+import { verifyToken } from "../Middleware/authMiddleware.js"; // Thay đổi import
+import { verifyTokenController } from "../Controller/authController.js"; // Thay đổi import
+import {
+    addToCartController, getCartController,
+    getCartItemsController, removeFromCartController,
+    updateCartController
+} from "../Controller/cartController.js";
 // routerAPI.post('/register', createUser);
 routerAPI.post('/login', Login);
 routerAPI.get('/verify-token', verifyTokenController);
@@ -51,5 +57,13 @@ routerAPI.post('/create-role', createRoleController);
 routerAPI.get('/role-all', getAllRolesController);
 routerAPI.delete('/delete-role', deleteRoleController);
 routerAPI.put('/update-role', updateRoleController);
+
+//Api cho cart
+routerAPI.post('/cart/add', verifyToken, addToCartController);
+routerAPI.get('/cart', verifyToken, getCartController);
+routerAPI.get('/cart/items', verifyToken, getCartItemsController); // Add this new route
+routerAPI.delete('/cart/delete/:cartItemId', verifyToken, removeFromCartController);
+routerAPI.put('/cart/update/:cartItemId', verifyToken, updateCartController);
+
 
 module.exports = routerAPI;

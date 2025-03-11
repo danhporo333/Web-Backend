@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 import db from '../model/index.js';
 
-const verifyToken = (req, res, next) => {
+export const verifyToken = (req, res, next) => {
     const token = req.header("Authorization")?.split(" ")[1];
 
     if (!token) {
@@ -18,7 +18,7 @@ const verifyToken = (req, res, next) => {
     }
 }
 
-const checkRole = (roles) => {
+export const checkRole = (roles) => {
     return async (req, res, next) => {
         try {
             const userRoles = await db.UserRole.findAll({
@@ -40,5 +40,3 @@ const checkRole = (roles) => {
         }
     };
 };
-
-module.exports = { verifyToken, checkRole };
