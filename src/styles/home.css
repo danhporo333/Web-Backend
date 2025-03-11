@@ -99,7 +99,7 @@
     gap: 10px;
     opacity: 0;
     z-index: 2;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
 }
 
 .product-card:hover .product-buttons {
@@ -130,7 +130,7 @@
     border-radius: 10px;
     cursor: pointer;
     font-weight: bold;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
 }
 
 .add-to-cart-btn:hover {

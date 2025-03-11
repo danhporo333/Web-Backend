@@ -16,7 +16,7 @@ const UserPage = () => {
     const loadUser = async () => {
         const res = await fetchAllUserAPI();
         // Xử lý dữ liệu vai trò
-        const usersWithRoles = res.data.users.map(user => ({
+        const usersWithRoles = res.data.user.map(user => ({
             ...user,
             role: user.Roles.map(role => role.name).join(', ')
         }));

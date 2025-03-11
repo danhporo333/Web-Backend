@@ -1,13 +1,13 @@
-
 import Header from './components/layout/admin/header';
 import Footer from './components/layout/admin/footer';
 import { Outlet } from 'react-router-dom';
 import { getAccountAPI } from './services/api.service';
 import { useEffect, useContext } from 'react';
 import { AuthContext } from './components/context/auth.context';
+import { Spin } from 'antd';
 
 const App = () => {
-  const { setUser } = useContext(AuthContext);
+  const { setUser, isAppLoading, setIsAppLoading } = useContext(AuthContext);
 
   useEffect(() => {
     fetchUserInfo();
@@ -15,20 +15,27 @@ const App = () => {
 
   const fetchUserInfo = async () => {
     const res = await getAccountAPI();
-    // await delay(3000)
     if (res.data) {
       setUser(res.data.user);
-      console.log(">>check user data: ", res.data.user)
     }
+    setIsAppLoading(false);
   }
 
   return (
     <>
-      <Header />
-      <Outlet />
-      <Footer />
+      {isAppLoading === true ?
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <Spin />
+        </div>
+        :
+        <>
+          <Header />
+          <Outlet />
+          <Footer />
+        </>
+      }
     </>
   )
 }
 
-export default App
+export default App;

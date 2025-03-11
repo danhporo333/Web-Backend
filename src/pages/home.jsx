@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { fetchAllProductsAPI } from '../services/api.service';
+import { fetchAllProductsAPI, addToCartAPI } from '../services/api.service';
 import '../styles/home.css';
 import { useNavigate } from 'react-router-dom';
+import { notification } from 'antd';
 
 const HomePage = () => {
     const [products, setProducts] = useState([]);
@@ -12,7 +13,7 @@ const HomePage = () => {
             const res = await fetchAllProductsAPI();
             if (res.data) {
                 setProducts(res.data.products);
-                console.log(">check :", res.data.products);
+                // console.log(">check :", res.data.products);
             }
         } catch (error) {
             console.error("Failed to fetch products", error);
@@ -23,9 +24,24 @@ const HomePage = () => {
         loadProducts();
     }, []);
 
-    const handleAddToCart = (product) => {
-        console.log("Add to cart:", product);
-        // Implement add to cart functionality here
+    const handleAddToCart = async (product) => {
+        try {
+            const res = await addToCartAPI(product.id);
+            if (res.data) {
+                notification.success({
+                    message: "Thông báo",
+                    description: "thêm sản phẩm vào giỏ hàng thành công"
+                });
+            } else {
+                notification.error({
+                    message: "Lỗi",
+                    description: "thêm sản phẩm vào giỏ hàng thất bại hoặc bạn chưa đăng nhập"
+                });
+            }
+        } catch (error) {
+            console.error("Failed to add product to cart", error);
+            // message.error("Failed to add product to cart");
+        }
     };
 
     const handleViewDetails = (product) => {

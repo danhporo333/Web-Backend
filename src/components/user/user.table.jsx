@@ -16,9 +16,9 @@ const UserTable = (props) => {
 
     const handleDeleteUser = async (id) => {
         try {
-            console.log(`Deleting user with id: ${id}`); // Thêm log để kiểm tra id
+            // console.log(`Deleting user with id: ${id}`); // Thêm log để kiểm tra id
             const res = await deleteUserAPI(id);
-            console.log(">>> res", res); // Thêm log để kiểm tra phản hồi từ API
+            // console.log(">>> res", res); // Thêm log để kiểm tra phản hồi từ API
             if (res && res.data) {
                 notification.success({
                     message: "Delete user",

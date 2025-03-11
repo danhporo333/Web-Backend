@@ -1,19 +1,30 @@
-import { Link } from 'react-router-dom';
-import { Menu } from 'antd';
-import { UsergroupAddOutlined, HomeOutlined, AuditOutlined, LoginOutlined, AliwangwangOutlined } from '@ant-design/icons';
+import { Link, useNavigate } from 'react-router-dom';
+import { Menu, Badge } from 'antd';
+import { UsergroupAddOutlined, HomeOutlined, AuditOutlined, LoginOutlined, AliwangwangOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { useState, useContext } from 'react';
 import { AuthContext } from '../../context/auth.context';
 
 const Header = () => {
-
     const [current, setCurrent] = useState('');
-    const { user } = useContext(AuthContext);
+    const { user, setUser } = useContext(AuthContext);
+    const navigate = useNavigate();
 
-    // console.log(">>> check data: ", user)
     const onClick = (e) => {
-        console.log('click ', e);
         setCurrent(e.key);
     };
+
+    const handleLogout = () => {
+        setUser({
+            id: "",
+            email: "",
+            username: "",
+            role: "",
+        });
+        localStorage.removeItem("token");
+        localStorage.removeItem("cartItems");
+        navigate('/');
+    };
+
     const items = [
         {
             label: <Link to={"/"}>Home</Link>,
@@ -29,17 +40,22 @@ const Header = () => {
             label: <Link to={"/books"}>Books</Link>,
             key: 'books',
             icon: <AuditOutlined />,
-
         },
-
-        ...(!user.id ? [{
+        {
+            label: <Link to={"/cart"}>
+                <Badge count={0} size="small">
+                    Giỏ hàng
+                </Badge>
+            </Link>,
+            key: 'cart',
+            icon: <ShoppingCartOutlined />,
+        },
+        ...(!user.userId ? [{
             label: <Link to={"/login"}>Đăng nhập</Link>,
             key: 'login',
             icon: <LoginOutlined />,
         }] : []),
-
-
-        ...(user.id ? [{
+        ...(user.userId ? [{
             label: `Welcome ${user.username}`,
             key: 'setting',
             icon: <AliwangwangOutlined />,
@@ -47,10 +63,12 @@ const Header = () => {
                 {
                     label: 'Đăng xuất',
                     key: 'logout',
+                    onClick: handleLogout,
                 },
             ],
         }] : []),
     ];
+
     return (
         <Menu
             onClick={onClick}

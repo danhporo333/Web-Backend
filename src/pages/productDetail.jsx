@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchProductByIdAPI } from '../services/api.service';
-import './productDetail.css';
+import { fetchProductByIdAPI, addToCartAPI } from '../services/api.service';
+import '../styles/productDetail.css';
+import { notification } from 'antd';
 
 const ProductDetail = () => {
     const { id } = useParams();
@@ -21,6 +22,26 @@ const ProductDetail = () => {
         };
         loadProduct();
     }, [id]);
+
+    const handleAddToCart = async () => {
+        try {
+            const res = await addToCartAPI(product.id);
+            if (res.data) {
+                notification.success({
+                    message: "Thông báo",
+                    description: "thêm sản phẩm vào giỏ hàng thành công"
+                });
+            } else {
+                notification.error({
+                    message: "Lỗi",
+                    description: "thêm sản phẩm vào giỏ hàng thất bại hoặc bạn chưa đăng nhập"
+                });
+            }
+        } catch (error) {
+            console.error("Failed to add product to cart", error);
+            // message.error("Failed to add product to cart");
+        }
+    };
 
     if (!product) return <div>Loading...</div>;
 
@@ -44,7 +65,7 @@ const ProductDetail = () => {
                         <span>Stock: {product.stock}</span>
                     </div>
                     <div className="product-detail-actions">
-                        <button className="btn-add-to-cart">Add to Cart</button>
+                        <button className="btn-add-to-cart" onClick={handleAddToCart}>Add to Cart</button>
                         <button className="btn-buy-now">Buy Now</button>
                     </div>
                 </div>

@@ -21,7 +21,7 @@ const LoginPage = () => {
             message.success("Đăng nhập thành công");
             localStorage.setItem("token", res.data.token);
             setUser(res.data.user);
-            // console.log(">>check res; ", res.data.users)
+            // console.log(">>check res; ", res.data.user)
             navigate("/");
         } else {
             notification.error({

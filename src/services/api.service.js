@@ -80,6 +80,34 @@ const fetchProductByIdAPI = (id) => {
     return axios.get(URL_BACKEND);
 }
 
+const fetchAllCartAPI = () => {
+    const URL_BACKEND = "/v2/api/cart";
+    return axios.get(URL_BACKEND);
+}
+
+
+const addToCartAPI = (productId, quantity = 1) => {
+    const URL_BACKEND = "/v2/api/cart/add";
+    const data = {
+        productId: productId,
+        quantity: quantity
+    }
+    return axios.post(URL_BACKEND, data);
+}
+
+const deleteFromCartAPI = (cartItemId) => {
+    const URL_BACKEND = `/v2/api/cart/delete/${cartItemId}`;
+    return axios.delete(URL_BACKEND);
+}
+
+const updateCartQuantityAPI = (cartItemId, quantity) => {
+    const URL_BACKEND = `/v2/api/cart/update/${cartItemId}`;
+    const data = {
+        quantity: quantity
+    }
+    return axios.put(URL_BACKEND, data);
+}
+
 export {
     createUserAPI,
     updateUserAPI,
@@ -90,5 +118,9 @@ export {
     loginApi,
     getAccountAPI,
     fetchAllProductsAPI,
-    fetchProductByIdAPI
+    fetchProductByIdAPI,
+    fetchAllCartAPI,
+    addToCartAPI,
+    deleteFromCartAPI,
+    updateCartQuantityAPI
 }

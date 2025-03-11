@@ -5,7 +5,6 @@ export const AuthContext = createContext({
     email: "",
     username: "",
     role: "",
-
 });
 
 export const AuthWrapper = (props) => {
@@ -16,10 +15,11 @@ export const AuthWrapper = (props) => {
         role: "",
     })
 
+    const [isAppLoading, setIsAppLoading] = useState(true);
+
     return (
-        <AuthContext.Provider value={{ user, setUser }}>
+        <AuthContext.Provider value={{ user, setUser, isAppLoading, setIsAppLoading }}>
             {props.children}
-            {/* <RouterProvider router={router} /> */}
         </AuthContext.Provider>
     )
 }
