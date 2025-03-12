@@ -13,8 +13,9 @@ import ErrorPage from './pages/error.jsx';
 import { AuthWrapper } from './components/context/auth.context.jsx';
 import HomePage from './pages/home.jsx';
 import ProductDetail from './pages/productDetail.jsx';
-import CartPage from './pages/CartPage'; // Import CartPage
+import CartPage from './pages/CartPage';
 import PrivateRoute from './pages/private.rout.jsx';
+import AdminRoute from './components/routes/AdminRoute.jsx';
 
 const router = createBrowserRouter([
   {
@@ -28,11 +29,17 @@ const router = createBrowserRouter([
       },
       {
         path: "/users",
-        element: <UserPage />
+        element:
+          <AdminRoute>
+            <UserPage />
+          </AdminRoute>
       },
       {
         path: "/books",
-        element: <BookPage />
+        element:
+          <AdminRoute>
+            <BookPage />
+          </AdminRoute>
       },
       {
         path: "/product/:id",

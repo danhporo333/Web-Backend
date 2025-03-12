@@ -18,12 +18,17 @@ const Header = () => {
             id: "",
             email: "",
             username: "",
-            role: "",
+            roles: []
         });
         localStorage.removeItem("token");
         localStorage.removeItem("cartItems");
         navigate('/');
     };
+
+    // console.log(">>> check user object:", user); // Add this to debug
+
+    const isAdmin = user?.roles?.includes('Admin');
+    console.log(">>> check isAdmin: ", isAdmin);
 
     const items = [
         {
@@ -31,16 +36,18 @@ const Header = () => {
             key: 'home',
             icon: <HomeOutlined />,
         },
-        {
-            label: <Link to={"/users"}>Users</Link>,
-            key: 'users',
-            icon: <UsergroupAddOutlined />
-        },
-        {
-            label: <Link to={"/books"}>Books</Link>,
-            key: 'books',
-            icon: <AuditOutlined />,
-        },
+        ...(isAdmin ? [
+            {
+                label: <Link to={"/users"}>Users</Link>,
+                key: 'users',
+                icon: <UsergroupAddOutlined />
+            },
+            {
+                label: <Link to={"/books"}>Books</Link>,
+                key: 'books',
+                icon: <AuditOutlined />,
+            }
+        ] : []),
         {
             label: <Link to={"/cart"}>
                 <Badge count={0} size="small">

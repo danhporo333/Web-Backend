@@ -4,7 +4,7 @@ export const AuthContext = createContext({
     id: "",
     email: "",
     username: "",
-    role: "",
+    roles: []
 });
 
 export const AuthWrapper = (props) => {
@@ -12,7 +12,7 @@ export const AuthWrapper = (props) => {
         id: "",
         email: "",
         username: "",
-        role: "",
+        roles: []
     })
 
     const [isAppLoading, setIsAppLoading] = useState(true);
