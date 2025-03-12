@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchProductByIdAPI, addToCartAPI } from '../services/api.service';
 import '../styles/productDetail.css';
-import { notification } from 'antd';
+import { notification, Spin } from 'antd';
 
 const ProductDetail = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const loadProduct = async () => {
@@ -18,6 +19,8 @@ const ProductDetail = () => {
                 }
             } catch (error) {
                 console.error("Failed to fetch product details", error);
+            } finally {
+                setLoading(false);
             }
         };
         loadProduct();
@@ -43,6 +46,7 @@ const ProductDetail = () => {
         }
     };
 
+    if (loading) return <div className="center-spinner"><Spin size="large" /></div>;
     if (!product) return <div>Loading...</div>;
 
     return (

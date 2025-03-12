@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Table, Button, InputNumber, message } from 'antd';
+import { Table, Button, InputNumber, message, Spin } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import '../styles/CartPage.css';
@@ -7,6 +7,7 @@ import { fetchAllCartAPI, deleteFromCartAPI, updateCartQuantityAPI } from '../se
 
 const CartPage = () => {
     const [cartItems, setCartItems] = useState([]);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const baseURL = import.meta.env.VITE_BACKEND_URL; // Base URL for images
 
@@ -30,6 +31,8 @@ const CartPage = () => {
             } catch (error) {
                 console.error("Failed to fetch cart items", error);
                 setCartItems([]);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -136,6 +139,8 @@ const CartPage = () => {
     const total = cartItems.reduce((sum, item) =>
         sum + item.price * item.quantity, 0
     );
+
+    if (loading) return <div className="center-spinner"><Spin size="large" /></div>;
 
     return (
         <div className="cart-page">

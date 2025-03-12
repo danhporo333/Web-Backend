@@ -4,8 +4,7 @@ import { UsergroupAddOutlined, HomeOutlined, AuditOutlined, LoginOutlined, Aliwa
 import { useState, useContext } from 'react';
 import { AuthContext } from '../../context/auth.context';
 
-const Header = () => {
-    const [current, setCurrent] = useState('');
+const Header = ({ current, setCurrent }) => {
     const { user, setUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -23,12 +22,10 @@ const Header = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("cartItems");
         navigate('/');
+        setCurrent('home');
     };
 
-    // console.log(">>> check user object:", user); // Add this to debug
-
     const isAdmin = user?.roles?.includes('Admin');
-    console.log(">>> check isAdmin: ", isAdmin);
 
     const items = [
         {

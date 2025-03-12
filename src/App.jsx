@@ -1,17 +1,25 @@
 import Header from './components/layout/admin/header';
 import Footer from './components/layout/admin/footer';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { getAccountAPI } from './services/api.service';
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { AuthContext } from './components/context/auth.context';
 import { Spin } from 'antd';
 
 const App = () => {
   const { setUser, isAppLoading, setIsAppLoading } = useContext(AuthContext);
+  const [current, setCurrent] = useState('home');
+  const location = useLocation();
 
   useEffect(() => {
     fetchUserInfo();
   }, []);
+
+  useEffect(() => {
+    if (location.pathname === '/') {
+      setCurrent('home');
+    }
+  }, [location]);
 
   const fetchUserInfo = async () => {
     const res = await getAccountAPI();
@@ -29,7 +37,7 @@ const App = () => {
         </div>
         :
         <>
-          <Header />
+          <Header current={current} setCurrent={setCurrent} />
           <Outlet />
           <Footer />
         </>
