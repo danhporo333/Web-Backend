@@ -1,6 +1,7 @@
-import { Button, Input, Form, notification, Row, Col, Divider } from "antd";
-import { createUserAPI } from "../../services/api.service";
+import { Button, Input, Form, notification, Divider } from "antd";
+import { register } from "../../services/api.service";
 import { Link, useNavigate } from "react-router-dom";
+import { UserOutlined, LockOutlined, PhoneOutlined, MailOutlined } from '@ant-design/icons';
 
 const RegisterPage = () => {
     const [form] = Form.useForm();
@@ -8,9 +9,9 @@ const RegisterPage = () => {
 
     const onFinish = async (values) => {
         //call api
-        const res = await createUserAPI(
-            values.fullName,
+        const res = await register(
             values.email,
+            values.username,
             values.password,
             values.phone);
 
@@ -29,93 +30,107 @@ const RegisterPage = () => {
     }
 
     return (
-        <Form
-            form={form}
-            layout="vertical"
-            onFinish={onFinish}
-            style={{ margin: "30px" }}
-        // onFinishFailed={onFinishFailed}
-        >
-            <h3 style={{ textAlign: "center" }}>Đăng ký tài khoản</h3>
-            <Row justify={"center"}>
-                <Col xs={24} md={8} >
-                    <Form.Item
-                        label="Email"
-                        name="email"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input your fullName!',
-                            },
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
-                </Col>
-            </Row>
-            <Row justify={"center"}>
-                <Col xs={24} md={8}>
-                    <Form.Item
-                        label="UserName"
-                        name="username"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input your email!',
-                            },
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
-                </Col>
-            </Row>
-            <Row justify={"center"}>
-                <Col xs={24} md={8}>
-                    <Form.Item
-                        label="Password"
-                        name="password"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input your password!',
-                            },
-                        ]}
-                    >
-                        <Input.Password />
-                    </Form.Item>
-                </Col>
-            </Row>
-            <Row justify={"center"}>
-                <Col xs={24} md={8}>
-                    <Form.Item
-                        label="Phone number"
-                        name="phone"
-                        rules={[
-                            {
-                                required: true,
-                                pattern: new RegExp(/\d+/g),
-                                message: "Wrong format!"
-                            }
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
-                </Col>
-            </Row>
+        <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '100vh',
+            background: '#f0f2f5'
+        }}>
+            <Form
+                form={form}
+                layout="vertical"
+                onFinish={onFinish}
+                style={{
+                    padding: '2rem',
+                    background: 'white',
+                    borderRadius: '8px',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                    width: '100%',
+                    maxWidth: '400px'
+                }}
+            >
+                <h2 style={{
+                    textAlign: "center",
+                    marginBottom: '2rem',
+                    color: '#1890ff'
+                }}>Đăng ký tài khoản</h2>
 
-            <Row justify={"center"}>
-                <Col xs={24} md={8}>
-                    <div>
-                        <Button
-                            onClick={() => form.submit()}
-                            type="primary">Register</Button>
-                    </div>
-                    <Divider />
-                    <div>Đã có tài khoản? <Link to={"/login"}>Đăng nhập tại đây</Link></div>
-                </Col>
-            </Row>
+                <Form.Item
+                    label="Email"
+                    name="email"
+                    rules={[
+                        {
+                            required: true,
+                            type: 'email',
+                            message: 'Vui lòng nhập email hợp lệ!',
+                        },
+                    ]}
+                >
+                    <Input prefix={<MailOutlined />} placeholder="Nhập email" />
+                </Form.Item>
 
-        </Form >
+                <Form.Item
+                    label="Tên người dùng"
+                    name="username"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập tên người dùng!',
+                        },
+                    ]}
+                >
+                    <Input prefix={<UserOutlined />} placeholder="Nhập tên người dùng" />
+                </Form.Item>
+
+                <Form.Item
+                    label="Mật khẩu"
+                    name="password"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập mật khẩu!',
+                        },
+                        {
+                            min: 6,
+                            message: 'Mật khẩu phải có ít nhất 6 ký tự!',
+                        }
+                    ]}
+                >
+                    <Input.Password prefix={<LockOutlined />} placeholder="Nhập mật khẩu" />
+                </Form.Item>
+
+                <Form.Item
+                    label="Số điện thoại"
+                    name="phone"
+                    rules={[
+                        {
+                            required: true,
+                            pattern: new RegExp(/^[0-9]{10}$/),
+                            message: "Vui lòng nhập số điện thoại hợp lệ!"
+                        }
+                    ]}
+                >
+                    <Input prefix={<PhoneOutlined />} placeholder="Nhập số điện thoại" />
+                </Form.Item>
+
+                <Form.Item>
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        style={{ width: '100%' }}
+                    >
+                        Đăng ký
+                    </Button>
+                </Form.Item>
+
+                <Divider plain>Hoặc</Divider>
+
+                <div style={{ textAlign: 'center' }}>
+                    Đã có tài khoản? <Link to="/login">Đăng nhập ngay</Link>
+                </div>
+            </Form>
+        </div>
     )
 }
 

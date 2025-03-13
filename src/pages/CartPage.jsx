@@ -101,7 +101,7 @@ const CartPage = () => {
                 );
                 setCartItems(newItems);
                 updateLocalStorage(newItems);
-                message.success('Cập nhật số lượng sản phẩm thành công');
+                // message.success('Cập nhật số lượng sản phẩm thành công');
             } else {
                 message.error('Cập nhật số lượng sản phẩm thất bại');
             }

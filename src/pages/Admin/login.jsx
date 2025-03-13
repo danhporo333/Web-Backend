@@ -1,6 +1,6 @@
-import { Button, Form, Input, Row, Col, Divider, message, notification } from "antd";
+import { Button, Form, Input, notification, Divider } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowRightOutlined } from "@ant-design/icons";
+import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import { loginApi } from "../../services/api.service";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../components/context/auth.context";
@@ -18,10 +18,8 @@ const LoginPage = () => {
         const res = await loginApi(values.email, values.password);
         console.log(">>> check values: ", values)
         if (res.data) {
-            message.success("Đăng nhập thành công");
             localStorage.setItem("token", res.data.token);
             setUser(res.data.user);
-            // console.log(">>check res; ", res.data.user)
             navigate("/");
         } else {
             notification.error({
@@ -33,74 +31,93 @@ const LoginPage = () => {
     }
 
     return (
-        <Row justify={"center"} style={{ marginTop: "30px" }}>
-            <Col xs={24} md={16} lg={8}>
-                <fieldset style={{
-                    padding: "15px",
-                    margin: "5px",
-                    border: "1px solid #ccc",
-                    borderRadius: "5px"
-                }}>
-                    <legend>Đăng Nhập</legend>
-                    <Form
-                        form={form}
-                        layout="vertical"
-                        onFinish={onFinish}
+        <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '100vh',
+            background: '#f0f2f5'
+        }}>
+            <Form
+                form={form}
+                layout="vertical"
+                onFinish={onFinish}
+                style={{
+                    padding: '2rem',
+                    background: 'white',
+                    borderRadius: '8px',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                    width: '100%',
+                    maxWidth: '400px'
+                }}
+            >
+                <h2 style={{
+                    textAlign: "center",
+                    marginBottom: '2rem',
+                    color: '#1890ff'
+                }}>Đăng Nhập</h2>
+
+                <Form.Item
+                    label="Email"
+                    name="email"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập email!',
+                        },
+                        {
+                            type: 'email',
+                            message: 'Email không đúng định dạng!',
+                        },
+                    ]}
+                >
+                    <Input
+                        prefix={<MailOutlined />}
+                        placeholder="Nhập email"
+                        size="large"
+                    />
+                </Form.Item>
+
+                <Form.Item
+                    label="Mật khẩu"
+                    name="password"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập mật khẩu!',
+                        },
+                    ]}
+                >
+                    <Input.Password
+                        prefix={<LockOutlined />}
+                        placeholder="Nhập mật khẩu"
+                        size="large"
+                        onKeyDown={(event) => {
+                            if (event.key === 'Enter') form.submit()
+                        }}
+                    />
+                </Form.Item>
+
+                <Form.Item>
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        loading={loading}
+                        style={{ width: '100%', height: '40px', fontSize: '16px' }}
                     >
-                        <Form.Item
-                            label="Email"
-                            name="email"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Email không được để trống!',
-                                },
-                                {
-                                    type: "email",
-                                    message: 'Email không đúng định dạng!',
-                                },
-                            ]}
-                        >
-                            <Input />
-                        </Form.Item>
+                        Đăng nhập
+                    </Button>
+                </Form.Item>
 
-                        <Form.Item
-                            label="Password"
-                            name="password"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Password không được để trống!',
-                                },
-                            ]}
-                        >
-                            <Input.Password onKeyDown={(event) => {
-                                if (event.key === 'Enter') form.submit()
-                            }} />
-                        </Form.Item>
+                <Divider plain>Hoặc</Divider>
 
-                        <Form.Item >
-                            <div style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center"
-                            }}>
-                                <Button
-                                    loading={loading}
-                                    type="primary" onClick={() => form.submit()}>
-                                    Login
-                                </Button>
-                                <Link to="/">Go to homepage <ArrowRightOutlined /></Link>
-                            </div>
-                        </Form.Item>
-                    </Form>
-                    <Divider />
-                    <div style={{ textAlign: "center" }}>
-                        Chưa có tài khoản? <Link to={"/register"}>Đăng ký tại đây</Link>
-                    </div>
-                </fieldset>
-            </Col>
-        </Row>
+                <div style={{ textAlign: 'center' }}>
+                    <Link to="/">Về trang chủ</Link>
+                    <Divider type="vertical" />
+                    <Link to="/register">Đăng ký ngay</Link>
+                </div>
+            </Form>
+        </div>
     )
 }
 

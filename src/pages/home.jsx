@@ -3,6 +3,7 @@ import { fetchAllProductsAPI, addToCartAPI } from '../services/api.service';
 import '../styles/home.css';
 import { useNavigate } from 'react-router-dom';
 import { notification, Spin } from 'antd';
+import gsap from 'gsap';
 
 const HomePage = () => {
     const [products, setProducts] = useState([]);
@@ -18,7 +19,7 @@ const HomePage = () => {
         } catch (error) {
             console.error("Failed to fetch products", error);
         } finally {
-            setLoading(false); 
+            setLoading(false);
         }
     };
 
@@ -26,7 +27,7 @@ const HomePage = () => {
         loadProducts();
     }, []);
 
-    const handleAddToCart = async (product) => {
+    const handleAddToCart = async (product, event) => {
         try {
             const res = await addToCartAPI(product.id);
             if (res.data) {
@@ -34,6 +35,7 @@ const HomePage = () => {
                     message: "Thông báo",
                     description: "thêm sản phẩm vào giỏ hàng thành công"
                 });
+                animateProductToCart(event.target);
             } else {
                 notification.error({
                     message: "Lỗi",
@@ -42,8 +44,46 @@ const HomePage = () => {
             }
         } catch (error) {
             console.error("Failed to add product to cart", error);
-            // message.error("Failed to add product to cart");
         }
+    };
+
+    const animateProductToCart = (button) => {
+        const productCard = button.closest('.product-card');
+        const productImage = productCard.querySelector('.product-image');
+        const cartIcon = document.querySelector('.anticon-shopping-cart');
+
+        if (!cartIcon) {
+            console.error('Cart icon not found');
+            return;
+        }
+
+        const productImageClone = productImage.cloneNode(true);
+        productImageClone.style.position = 'fixed';
+        productImageClone.style.zIndex = 1000;
+        productImageClone.style.width = '100px';
+        productImageClone.style.height = '100px';
+        productImageClone.style.top = `${productImage.getBoundingClientRect().top}px`;
+        productImageClone.style.left = `${productImage.getBoundingClientRect().left}px`;
+        productImageClone.style.objectFit = 'contain';
+
+        document.body.appendChild(productImageClone);
+
+        gsap.to(productImageClone, {
+            duration: 2,
+            x: cartIcon.getBoundingClientRect().left - productImage.getBoundingClientRect().left,
+            y: cartIcon.getBoundingClientRect().top - productImage.getBoundingClientRect().top,
+            scale: 0.1,
+            ease: "power1.inOut",
+            onComplete: () => {
+                productImageClone.remove();
+                gsap.to(cartIcon, {
+                    scale: 1.3,
+                    duration: 0.3,
+                    yoyo: true,
+                    repeat: 1
+                });
+            }
+        });
     };
 
     const handleViewDetails = (product) => {
@@ -74,7 +114,7 @@ const HomePage = () => {
                                         <p>Stock: {product.stock}</p>
                                     </div>
                                     <div className="product-buttons">
-                                        <button className="add-to-cart-btn" onClick={() => handleAddToCart(product)}>
+                                        <button className="add-to-cart-btn" onClick={(e) => handleAddToCart(product, e)}>
                                             Add to Cart
                                         </button>
                                         <button className="details-btn" onClick={() => handleViewDetails(product)}>

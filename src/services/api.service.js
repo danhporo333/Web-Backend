@@ -2,13 +2,24 @@
 import axios from './axios.customize';
 
 const createUserAPI = (email, username, password, phone, role) => {
-    const URL_BACKEND = "/v2/api/register";
+    const URL_BACKEND = "/v2/api/create-user";
     const data = {
         email: email,
         password: password,
         username: username,
         phone: phone,
         role: role
+    }
+    return axios.post(URL_BACKEND, data);
+}
+
+const register = (email, username, password, phone) => {
+    const URL_BACKEND = "/v2/api/register";
+    const data = {
+        email: email,
+        password: password,
+        username: username,
+        phone: phone,
     }
     return axios.post(URL_BACKEND, data);
 }
@@ -122,5 +133,6 @@ export {
     fetchAllCartAPI,
     addToCartAPI,
     deleteFromCartAPI,
-    updateCartQuantityAPI
+    updateCartQuantityAPI,
+    register
 }

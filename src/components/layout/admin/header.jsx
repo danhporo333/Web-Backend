@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, Badge } from 'antd';
 import { UsergroupAddOutlined, HomeOutlined, AuditOutlined, LoginOutlined, AliwangwangOutlined, ShoppingCartOutlined } from '@ant-design/icons';
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
 import { AuthContext } from '../../context/auth.context';
 
 const Header = ({ current, setCurrent }) => {
@@ -48,11 +48,11 @@ const Header = ({ current, setCurrent }) => {
         {
             label: <Link to={"/cart"}>
                 <Badge count={0} size="small">
-                    Giỏ hàng
+                    <span className="cart-icon">Giỏ hàng</span>
                 </Badge>
             </Link>,
             key: 'cart',
-            icon: <ShoppingCartOutlined />,
+            icon: <ShoppingCartOutlined className="cart-icon" />,
         },
         ...(!user.userId ? [{
             label: <Link to={"/login"}>Đăng nhập</Link>,
