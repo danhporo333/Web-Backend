@@ -1,4 +1,36 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Allow text selection for specific elements */
+input,
+textarea,
+[contenteditable="true"],
+.selectable-text {
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+}
+
+/* Prevent cursor change on non-interactive elements */
+div:not([role="button"]),
+span:not([role="button"]),
+p:not([role="button"]),
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    cursor: default;
 }

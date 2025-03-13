@@ -35,6 +35,8 @@ const HomePage = () => {
                     message: "Thông báo",
                     description: "thêm sản phẩm vào giỏ hàng thành công"
                 });
+                // Dispatch event để Header component biết cần cập nhật số lượng
+                window.dispatchEvent(new Event('cartUpdated'));
                 animateProductToCart(event.target);
             } else {
                 notification.error({
@@ -115,10 +117,10 @@ const HomePage = () => {
                                     </div>
                                     <div className="product-buttons">
                                         <button className="add-to-cart-btn" onClick={(e) => handleAddToCart(product, e)}>
-                                            Add to Cart
+                                            thêm vào giỏ hàng
                                         </button>
                                         <button className="details-btn" onClick={() => handleViewDetails(product)}>
-                                            Product Details
+                                            Chi tiết
                                         </button>
                                     </div>
                                 </div>

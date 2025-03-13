@@ -39,10 +39,6 @@ const CartPage = () => {
         loadCartItems();
     }, []);
 
-    const updateLocalStorage = (items) => {
-        localStorage.setItem('cartItems', JSON.stringify(items));
-    };
-
     const columns = [
         {
             title: 'Sản phẩm',
@@ -100,8 +96,7 @@ const CartPage = () => {
                     item.id === id ? { ...item, quantity } : item
                 );
                 setCartItems(newItems);
-                updateLocalStorage(newItems);
-                // message.success('Cập nhật số lượng sản phẩm thành công');
+                window.dispatchEvent(new Event('cartUpdated'));
             } else {
                 message.error('Cập nhật số lượng sản phẩm thất bại');
             }
@@ -117,7 +112,7 @@ const CartPage = () => {
             if (res.data) {
                 const newItems = cartItems.filter(item => item.id !== id);
                 setCartItems(newItems);
-                updateLocalStorage(newItems);
+                window.dispatchEvent(new Event('cartUpdated'));
                 message.success('Đã xóa sản phẩm khỏi giỏ hàng');
             } else {
                 message.error('Xóa sản phẩm khỏi giỏ hàng thất bại');

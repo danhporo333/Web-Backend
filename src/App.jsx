@@ -16,8 +16,16 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (location.pathname === '/') {
+    // Set active menu item based on current path
+    const path = location.pathname;
+    if (path === '/') {
       setCurrent('home');
+    } else if (path === '/cart') {
+      setCurrent('cart');
+    } else if (path === '/users') {
+      setCurrent('users');
+    } else if (path === '/books') {
+      setCurrent('books');
     }
   }, [location]);
 
