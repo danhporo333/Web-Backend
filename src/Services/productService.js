@@ -1,5 +1,6 @@
 import { where } from "sequelize/lib/sequelize";
 import db from "../model/index.js";
+import Model from "sequelize/lib/model";
 
 export const createProduct = async (productData) => {
     try {
@@ -23,7 +24,9 @@ export const createProduct = async (productData) => {
 
 export const getAllProducts = async () => {
     try {
-        const products = await db.Product.findAll();
+        const products = await db.Product.findAll({
+            include: [{ model: db.Category, attributes: ['name'] }]
+        });
         return products;
     } catch (error) {
         console.error("Error in service:", error);
