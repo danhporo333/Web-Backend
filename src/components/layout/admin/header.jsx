@@ -28,7 +28,7 @@ const Header = ({ current, setCurrent }) => {
                     quantity: item.quantity,
                     image: item.Product.image.startsWith('http')
                         ? item.Product.image
-                        : `${import.meta.env.VITE_BACKEND_URL}/image/${item.Product.image}`
+                        : `${import.meta.env.VITE_BACKEND_URL}/image/products${item.Product.image}`
                 }));
                 setCartItems(items);
                 setCartItemCount(res.data.CartItems.length);

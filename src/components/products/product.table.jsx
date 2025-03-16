@@ -60,9 +60,10 @@ const ProductTable = ({ dataProducts, loadProducts }) => {
             key: 'stock',
         },
         {
-            title: 'Danh mục ID',
-            dataIndex: 'categoryId',
-            key: 'categoryId',
+            title: 'Danh mục',
+            dataIndex: 'Category',
+            key: 'category',
+            render: (Category) => Category?.name || 'N/A'
         },
         {
             title: 'Thao tác',

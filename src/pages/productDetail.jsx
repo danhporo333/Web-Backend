@@ -53,7 +53,7 @@ const ProductDetail = () => {
         <div className="product-detail-container">
             <div className="product-detail-content">
                 <div className="product-detail-left">
-                    <img src={product.image.startsWith('http') ? product.image : `${import.meta.env.VITE_BACKEND_URL}/image/${product.image}`}
+                    <img src={product.image.startsWith('http') ? product.image : `${import.meta.env.VITE_BACKEND_URL}/image/products/${product.image}`}
                         alt={product.name} className="product-detail-image" />
                 </div>
                 <div className="product-detail-right">

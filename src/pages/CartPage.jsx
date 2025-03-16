@@ -21,7 +21,7 @@ const CartPage = () => {
                         name: item.Product.name,
                         price: item.Product.price,
                         quantity: item.quantity,
-                        image: item.Product.image.startsWith('http') ? item.Product.image : `${baseURL}/image/${item.Product.image}`
+                        image: item.Product.image.startsWith('http') ? item.Product.image : `${baseURL}/image/products/${item.Product.image}`
                     }));
                     setCartItems(items);
                     console.log(">>check cart items: ", items);
