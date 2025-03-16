@@ -24,17 +24,22 @@ const App = () => {
       setCurrent('cart');
     } else if (path === '/users') {
       setCurrent('users');
-    } else if (path === '/books') {
-      setCurrent('books');
+    } else if (path === '/products') {
+      setCurrent('products');
     }
   }, [location]);
 
   const fetchUserInfo = async () => {
-    const res = await getAccountAPI();
-    if (res.data) {
-      setUser(res.data.user);
+    try {
+      const res = await getAccountAPI();
+      if (res.data) {
+        setUser(res.data.user);
+      }
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+    } finally {
+      setIsAppLoading(false);
     }
-    setIsAppLoading(false);
   }
 
   return (

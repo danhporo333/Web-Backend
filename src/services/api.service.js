@@ -1,4 +1,3 @@
-// import axios from "axios";
 import axios from './axios.customize';
 
 const createUserAPI = (email, username, password, phone, role) => {
@@ -48,7 +47,7 @@ const fetchAllUserAPI = () => {
 }
 
 const handleUploadFile = (file, folder) => {
-    const URL_BACKEND = `/api/v1/file/upload`;
+    const URL_BACKEND = `/v2/api/file`;
     let config = {
         headers: {
             "upload-type": folder,
@@ -57,10 +56,10 @@ const handleUploadFile = (file, folder) => {
     }
 
     const bodyFormData = new FormData();
-    bodyFormData.append("fileImg", file)
-
+    bodyFormData.append("image", file)
     return axios.post(URL_BACKEND, bodyFormData, config);
 }
+
 
 const fetchAllRoleAPI = () => {
     const URL_BACKEND = "/v2/api/role-all";
@@ -119,6 +118,43 @@ const updateCartQuantityAPI = (cartItemId, quantity) => {
     return axios.put(URL_BACKEND, data);
 }
 
+const createProductAPI = (name, description, price, stock, categoryId, image) => {
+    const URL_BACKEND = "/v2/api/product";
+    const data = {
+        name: name,
+        description: description,
+        price: price,
+        stock: stock,
+        categoryId: categoryId,
+        image: image
+    };
+    return axios.post(URL_BACKEND, data);
+};
+
+
+const updateProductAPI = (id, name, description, price, stock, categoryId, image) => {
+    const URL_BACKEND = "/v2/api/update-product";
+    const data = {
+        id,
+        name,
+        price,
+        description,
+        stock,
+        categoryId,
+        image
+    }
+    return axios.put(URL_BACKEND, data);
+}
+
+const deleteProductAPI = (id) => {
+    return axios.delete(`/v2/api/delete-product/${id}`);
+}
+
+const fetchAllCategoryAPI = () => {
+    const URL_BACKEND = "/v2/api/category-all";
+    return axios.get(URL_BACKEND);
+}
+
 export {
     createUserAPI,
     updateUserAPI,
@@ -134,5 +170,9 @@ export {
     addToCartAPI,
     deleteFromCartAPI,
     updateCartQuantityAPI,
-    register
+    register,
+    createProductAPI,
+    updateProductAPI,
+    deleteProductAPI,
+    fetchAllCategoryAPI
 }

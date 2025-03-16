@@ -4,6 +4,7 @@ import '../styles/home.css';
 import { useNavigate } from 'react-router-dom';
 import { notification, Spin } from 'antd';
 import gsap from 'gsap';
+import Slideshow from '../components/slideshow/Slideshow';
 
 const HomePage = () => {
     const [products, setProducts] = useState([]);
@@ -95,6 +96,7 @@ const HomePage = () => {
     return (
         <div className="home-container">
             <div className="home-content">
+                <Slideshow />
                 <h1 className="home-title">Products</h1>
                 {loading ? (
                     <div className="center-spinner">
@@ -107,7 +109,7 @@ const HomePage = () => {
                                 <div key={index} className="product-card">
                                     <h2>{product.name}</h2>
                                     <img
-                                        src={product.image.startsWith('http') ? product.image : `${import.meta.env.VITE_BACKEND_URL}/image/${product.image}`}
+                                        src={product.image.startsWith('http') ? product.image : `${import.meta.env.VITE_BACKEND_URL}/image/products/${product.image}`}
                                         alt={product.name}
                                         className="product-image"
                                     />

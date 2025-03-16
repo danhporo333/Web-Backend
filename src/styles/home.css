@@ -2,6 +2,8 @@
     padding: 20px;
     display: flex;
     justify-content: center;
+    min-height: calc(100vh - 100px);
+    /* Trừ đi chiều cao của header và footer */
 }
 
 .home-content {

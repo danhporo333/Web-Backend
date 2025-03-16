@@ -9,7 +9,7 @@ const UserPage = () => {
     // console.log(">>> dataUsers", dataUsers)
     //empty array => run once
     useEffect(() => {
-        console.log(">>> run useEffect 111")
+        // console.log(">>> run useEffect 111")
         loadUser();
     }, []);
 

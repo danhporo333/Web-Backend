@@ -120,8 +120,8 @@ const Header = ({ current, setCurrent }) => {
                 icon: <UsergroupAddOutlined />
             },
             {
-                label: <Link to={"/books"}>Books</Link>,
-                key: 'books',
+                label: <Link to={"/products"}>Products</Link>, // Sửa từ /product thành /products
+                key: 'products', // Sửa key từ 'product' thành 'products'
                 icon: <AuditOutlined />,
             }
         ] : []),
