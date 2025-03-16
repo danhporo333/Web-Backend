@@ -18,25 +18,52 @@ export const verifyToken = (req, res, next) => {
     }
 }
 
+// export const checkRole = (roles) => {
+//     return async (req, res, next) => {
+//         try {
+//             const userRoles = await db.UserRole.findAll({
+//                 where: { userId: req.user.userId },
+//                 include: [{ model: db.Role }]
+//             });
+
+//             const userRoleNames = userRoles.map(userRole => userRole.Role.name);
+
+//             const hasRole = roles.some(role => userRoleNames.includes(role));
+//             if (!hasRole) {
+//                 return res.status(403).json({ message: "Không có quyền truy cập!" });
+//             }
+
+//             next();
+//         } catch (error) {
+//             console.error("Error checking role:", error);
+//             return res.status(500).json({ message: "Lỗi máy chủ!" });
+//         }
+//     };
+// };
+
 export const checkRole = (roles) => {
     return async (req, res, next) => {
         try {
-            const userRoles = await db.UserRole.findAll({
-                where: { userId: req.user.userId },
-                include: [{ model: db.Role }]
-            });
+            // Get user's roles from JWT token
+            const userRoles = req.user.roles;
 
-            const userRoleNames = userRoles.map(userRole => userRole.Role.name);
+            // Check if user has required role
+            const hasRole = roles.some(role => userRoles.includes(role));
 
-            const hasRole = roles.some(role => userRoleNames.includes(role));
             if (!hasRole) {
-                return res.status(403).json({ message: "Không có quyền truy cập!" });
+                return res.status(403).json({
+                    errorCode: 1,
+                    message: "Bạn không có quyền thực hiện chức năng này!"
+                });
             }
 
             next();
         } catch (error) {
             console.error("Error checking role:", error);
-            return res.status(500).json({ message: "Lỗi máy chủ!" });
+            return res.status(500).json({
+                errorCode: 1,
+                message: "Lỗi server!"
+            });
         }
     };
 };

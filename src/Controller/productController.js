@@ -1,36 +1,45 @@
-import path from 'path';
-import fs from 'fs';
+
 import { uploadSingleFile } from '../Services/fileService.js';
 import { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct } from '../Services/productService.js';
 
 export const createProductController = async (req, res) => {
     try {
-        const { name, description, stock, price, categoryId } = req.body;
-        let imageUrl = "";
+        const { name, description, stock, price, categoryId, image } = req.body;
 
-        if (!req.files || Object.keys(req.files).length === 0) {
-            imageUrl = "";
-        } else {
+        let imageUrl = image;
+
+        // 🛑 Kiểm tra nếu có file đính kèm
+        if (req.files && req.files.image) {
             let result = await uploadSingleFile(req.files.image);
             imageUrl = result.name;
         }
 
+        if (!imageUrl) {
+            return res.status(400).json({
+                errorCode: 1,
+                message: 'Image is required!'
+            });
+        }
+
+        // 🛠 Lưu vào database
         const productData = { name, description, stock, price, categoryId, image: imageUrl };
         const product = await createProduct(productData);
+
         return res.status(201).json({
             errorCode: 0,
             message: 'Product created successfully!',
             product: product
         });
     } catch (error) {
-        console.error("Error creating product:", error);
+        console.error("❌ Error creating product:", error);
         return res.status(500).json({
             errorCode: 1,
             message: 'Server error! Unable to create product.',
             error: error.message
         });
     }
-}
+};
+
 
 export const getAllProductsController = async (req, res) => {
     try {
@@ -79,7 +88,7 @@ export const getProductByIdController = async (req, res) => {
 
 export const deleteProductController = async (req, res) => {
     try {
-        const { id } = req.body;
+        const { id } = req.params;
         const result = await deleteProduct(id);
         if (result === 0) {
             return res.status(404).json({
@@ -102,17 +111,22 @@ export const deleteProductController = async (req, res) => {
 
 export const updateProductController = async (req, res) => {
     try {
-        const { id, name, description, stock, price, categoryId } = req.body;
-        let imageUrl = "";
+        const { id, name, description, stock, price, categoryId, image } = req.body;
+        console.log("🚀 Received product data:", req.body);
 
-        if (!req.files || Object.keys(req.files).length === 0) {
-            imageUrl = "";
-        } else {
+        let imageUrl = image;
+        console.log("🚀 Initial imageUrl:", imageUrl);
+
+        if (req.files && req.files.image) {
+            console.log("📂 File data received:", req.files.image);
             let result = await uploadSingleFile(req.files.image);
             imageUrl = result.name;
+            console.log("📂 Uploaded image name:", imageUrl);
         }
 
         const updatedData = { name, description, stock, price, categoryId, image: imageUrl };
+        console.log("� Data before saving to DB:", updatedData);
+
         const result = await updateProduct(id, updatedData);
         if (result[0] === 0) {
             return res.status(404).json({
@@ -120,13 +134,16 @@ export const updateProductController = async (req, res) => {
                 message: 'Product not found!'
             });
         }
+
+        console.log("✅ Product updated successfully:", result);
+
         return res.status(200).json({
             errorCode: 0,
             message: 'Product updated successfully!',
-            data: result
+            data: updatedData
         });
     } catch (error) {
-        console.error("Error updating product:", error);
+        console.error("❌ Error updating product:", error);
         return res.status(500).json({
             errorCode: 1,
             message: 'Server error! Unable to update product.'

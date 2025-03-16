@@ -6,6 +6,7 @@ import {
 import db from '../model/index.js';
 
 
+
 export const createUserController = async (req, res) => {
     const { email, username, password, phone, role } = req.body;
     try {
@@ -164,3 +165,44 @@ export const Login = async (req, res) => {
         });
     }
 }
+
+export const register = async (req, res) => {
+    const { email, username, password, phone } = req.body;
+    try {
+        if (!email || !username || !password || !phone) {
+            return res.status(400).json({
+                errorCode: 1,
+                message: 'Vui lòng điền đầy đủ thông tin!'
+            });
+        }
+
+        const result = await createUsers(email, username, password, phone);
+        if (result.status === 'error') {
+            return res.status(400).json({
+                errorCode: 1,
+                message: result.message
+            });
+        }
+
+        // Assign default role 'User' to new register
+        await assignRoleToUser(result.id, 'User');
+
+        return res.status(201).json({
+            errorCode: 0,
+            message: 'Đăng ký thành công!',
+            data: {
+                user: {
+                    email: result.email,
+                    username: result.username,
+                    phone: result.phone
+                }
+            }
+        });
+    } catch (error) {
+        console.error("Error in register:", error);
+        return res.status(500).json({
+            errorCode: 1,
+            message: error.message || 'Lỗi server!'
+        });
+    }
+};

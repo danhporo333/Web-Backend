@@ -1,10 +1,13 @@
 import express from 'express';
 const routerAPI = express.Router();
+
+
 import {
-    createUser, Login, createUserController,
+    register, Login, createUserController,
     getAllUsersController, deleteUserController,
     updateUserController
 } from "../Controller/userController.js";
+
 import { uploadFileController } from "../Controller/fileController.js";
 import {
     createCategoryController, getAllCategoriesController,
@@ -21,42 +24,43 @@ import {
     deleteRoleController, updateRoleController
 } from "../Controller/roleController.js";
 
-import { verifyToken } from "../Middleware/authMiddleware.js"; // Thay đổi import
+import { verifyToken, checkRole } from "../Middleware/authMiddleware.js"; // Thay đổi import
 import { verifyTokenController } from "../Controller/authController.js"; // Thay đổi import
 import {
     addToCartController, getCartController,
     getCartItemsController, removeFromCartController,
     updateCartController
 } from "../Controller/cartController.js";
-// routerAPI.post('/register', createUser);
+
 routerAPI.post('/login', Login);
+routerAPI.post('/register', register);
 routerAPI.get('/verify-token', verifyTokenController);
 
 // Api cho category
-routerAPI.post("/category", createCategoryController);
-routerAPI.get('/category-all', getAllCategoriesController);
-routerAPI.delete('/delete-category', deleteCategoryController);
-routerAPI.put('/update-category', updateCategoryController);
+routerAPI.post("/category", verifyToken, checkRole(['Admin']), createCategoryController);
+routerAPI.get('/category-all', verifyToken, checkRole(['Admin', 'staff']), getAllCategoriesController);
+routerAPI.delete('/delete-category', verifyToken, checkRole(['Admin']), deleteCategoryController);
+routerAPI.put('/update-category', verifyToken, checkRole(['Admin', 'staff']), updateCategoryController);
 
 //api cho product
-routerAPI.post('/product', createProductController);
+routerAPI.post('/product', verifyToken, checkRole(['Admin']), createProductController);
 routerAPI.get('/product-all', getAllProductsController);
 routerAPI.get('/product/:id', getProductByIdController);
-routerAPI.delete('/delete-product', deleteProductController);
-routerAPI.put('/update-product', updateProductController);
+routerAPI.delete('/delete-product/:id', verifyToken, checkRole(['Admin']), deleteProductController);
+routerAPI.put('/update-product', verifyToken, checkRole(['Admin', 'staff']), updateProductController);
 
-//Api cho user
-routerAPI.post('/register', createUserController);
-routerAPI.get('/user-all', getAllUsersController);
-routerAPI.delete('/delete-user/:id', deleteUserController);
-routerAPI.put('/update-user', updateUserController);
+//Api cho user 
+routerAPI.post('/create-user', createUserController);
+routerAPI.get('/user-all', verifyToken, checkRole(['Admin']), getAllUsersController);
+routerAPI.delete('/delete-user/:id', verifyToken, checkRole(['Admin']), deleteUserController);
+routerAPI.put('/update-user', verifyToken, checkRole(['Admin']), updateUserController);
 routerAPI.post('/file', uploadFileController);
 
 //Api cho role
-routerAPI.post('/create-role', createRoleController);
+routerAPI.post('/create-role', verifyToken, checkRole(['Admin']), createRoleController);
 routerAPI.get('/role-all', getAllRolesController);
-routerAPI.delete('/delete-role', deleteRoleController);
-routerAPI.put('/update-role', updateRoleController);
+routerAPI.delete('/delete-role', verifyToken, checkRole(['Admin']), deleteRoleController);
+routerAPI.put('/update-role', verifyToken, checkRole(['Admin']), updateRoleController);
 
 //Api cho cart
 routerAPI.post('/cart/add', verifyToken, addToCartController);

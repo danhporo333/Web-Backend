@@ -3,6 +3,7 @@ import db from "../model/index.js";
 
 export const createProduct = async (productData) => {
     try {
+        console.log("🔥 Data before saving to DB:", productData);
         const product = await db.Product.create({
             name: productData.name,
             description: productData.description,
@@ -11,7 +12,9 @@ export const createProduct = async (productData) => {
             categoryId: productData.categoryId,
             image: productData.image
         });
+        console.log("✅ Saved product:", product);
         return product;
+
     } catch (error) {
         console.error("Error in service:", error);
         throw error;
@@ -67,6 +70,7 @@ export const updateProduct = async (id, productData) => {
         }, {
             where: { id: id }
         });
+        console.log("🚀 Updated product:", result);
         return result;
     } catch (error) {
         console.error("Error in service:", error);
