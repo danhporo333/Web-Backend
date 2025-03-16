@@ -14,9 +14,11 @@ zalo: 0345715248 (vietnamese)
 ===
 
 Các bước cài đặt: (chế độ development)
-1. clone code theo nhánh
+1. clone code theo nhánh:
+
 nhánh backend: git clone -b Web https://github.com/danhporo333/Web-Backend.git ( sử dụng docker với mysql )
 nhánh frontend: git clone -b reactjs https://github.com/danhporo333/Web-Backend.git 
+
 3. cài đặt thư viện: npm i
 4. Update file .env.development (nếu cần thiết)
 5. Chạy dự án: npm run dev
