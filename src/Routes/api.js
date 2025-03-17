@@ -16,7 +16,8 @@ import {
 
 import {
     createProductController, getAllProductsController,
-    getProductByIdController, deleteProductController, updateProductController
+    getProductByIdController, deleteProductController, updateProductController,
+    getProductsByCategoryController, searchProductsController
 } from "../Controller/productController.js";
 
 import {
@@ -46,6 +47,8 @@ routerAPI.put('/update-category', verifyToken, checkRole(['Admin', 'staff']), up
 routerAPI.post('/product', verifyToken, checkRole(['Admin']), createProductController);
 routerAPI.get('/product-all', getAllProductsController);
 routerAPI.get('/product/:id', getProductByIdController);
+routerAPI.get('/product/category/:categoryId', getProductsByCategoryController);
+routerAPI.get('/product/search', searchProductsController); // Thêm route mới này
 routerAPI.delete('/delete-product/:id', verifyToken, checkRole(['Admin']), deleteProductController);
 routerAPI.put('/update-product', verifyToken, checkRole(['Admin', 'staff']), updateProductController);
 

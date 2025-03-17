@@ -80,3 +80,35 @@ export const updateProduct = async (id, productData) => {
         throw error;
     }
 }
+
+export const getProductsByCategory = async (categoryId) => {
+    try {
+        const products = await db.Product.findAll({
+            where: { categoryId: categoryId },
+            attributes: ['id', 'name', 'description', 'price', 'stock', 'image']
+        });
+        return products;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const searchProducts = async (name, categoryId) => {
+    try {
+        const whereClause = {};
+        if (name) {
+            whereClause.name = { [db.Sequelize.Op.like]: `%${name}%` };
+        }
+        if (categoryId) {
+            whereClause.categoryId = categoryId;
+        }
+
+        const products = await db.Product.findAll({
+            where: whereClause,
+            attributes: ['id', 'name', 'description', 'price', 'stock', 'image']
+        });
+        return products;
+    } catch (error) {
+        throw error;
+    }
+};

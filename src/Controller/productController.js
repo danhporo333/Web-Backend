@@ -1,6 +1,5 @@
-
 import { uploadSingleFile } from '../Services/fileService.js';
-import { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct } from '../Services/productService.js';
+import { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, searchProducts } from '../Services/productService.js';
 
 export const createProductController = async (req, res) => {
     try {
@@ -147,6 +146,42 @@ export const updateProductController = async (req, res) => {
         return res.status(500).json({
             errorCode: 1,
             message: 'Server error! Unable to update product.'
+        });
+    }
+};
+
+export const getProductsByCategoryController = async (req, res) => {
+    try {
+        const { categoryId } = req.params;
+        const products = await getProductsByCategory(categoryId);
+        return res.status(200).json({
+            errorCode: 0,
+            message: 'Success!',
+            data: products
+        });
+    } catch (error) {
+        console.error("Error getting products by category:", error);
+        return res.status(500).json({
+            errorCode: 1,
+            message: 'Server error! Unable to get products by category.'
+        });
+    }
+};
+
+export const searchProductsController = async (req, res) => {
+    try {
+        const { name, categoryId } = req.query;
+        const products = await searchProducts(name, categoryId);
+        return res.status(200).json({
+            errorCode: 0,
+            message: 'Thành công!',
+            data: products
+        });
+    } catch (error) {
+        console.error("Lỗi khi tìm kiếm sản phẩm:", error);
+        return res.status(500).json({
+            errorCode: 1,
+            message: 'Lỗi máy chủ! Không thể tìm kiếm sản phẩm.'
         });
     }
 };
