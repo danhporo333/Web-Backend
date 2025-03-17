@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, Badge, Dropdown } from 'antd';
-import { UsergroupAddOutlined, HomeOutlined, AuditOutlined, LoginOutlined, AliwangwangOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { Menu, Badge, Dropdown, Input } from 'antd'; // Import Input from antd
+import { UsergroupAddOutlined, HomeOutlined, AuditOutlined, LoginOutlined, AliwangwangOutlined, ShoppingCartOutlined, SearchOutlined } from '@ant-design/icons'; // Import SearchOutlined
 import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../context/auth.context';
 import { fetchAllCartAPI } from '../../../services/api.service';
@@ -10,6 +10,7 @@ const Header = ({ current, setCurrent }) => {
     const navigate = useNavigate();
     const [cartItemCount, setCartItemCount] = useState(0);
     const [cartItems, setCartItems] = useState([]);
+    const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
 
     useEffect(() => {
         if (user?.userId) {
@@ -28,7 +29,7 @@ const Header = ({ current, setCurrent }) => {
                     quantity: item.quantity,
                     image: item.Product.image.startsWith('http')
                         ? item.Product.image
-                        : `${import.meta.env.VITE_BACKEND_URL}/image/products${item.Product.image}`
+                        : `${import.meta.env.VITE_BACKEND_URL}/image/products/${item.Product.image}`
                 }));
                 setCartItems(items);
                 setCartItemCount(res.data.CartItems.length);
@@ -61,6 +62,11 @@ const Header = ({ current, setCurrent }) => {
         setCartItemCount(0);
         navigate('/');
         setCurrent('home');
+    };
+
+    const handleSearch = (value) => {
+        setSearchQuery(value);
+        navigate(`/search?query=${value}`);
     };
 
     const isAdmin = user?.roles?.includes('Admin');
@@ -158,13 +164,34 @@ const Header = ({ current, setCurrent }) => {
     ];
 
     return (
-        <Menu
-            onClick={onClick}
-            selectedKeys={[current]}
-            mode="horizontal"
-            items={items}
-            style={{ display: "flex", justifyContent: "center" }}
-        />
+        <>
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0', background: '#fff', position: 'fixed', top: 0, width: '100%', zIndex: 1000, marginBottom: 0 }}>
+                <Input.Search
+                    placeholder="Tìm kiếm sản phẩm..."
+                    enterButton={<SearchOutlined />}
+                    size="large"
+                    onSearch={handleSearch}
+                    style={{ maxWidth: '600px', width: '100%' }}
+                />
+            </div>
+            <Menu
+                onClick={onClick}
+                selectedKeys={[current]}
+                mode="horizontal"
+                items={items}
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    position: "fixed",
+                    top: '50px', // Adjust this value based on the height of the search bar
+                    width: "100%",
+                    zIndex: 1000,
+                    marginTop: 0
+                }}
+            />
+            <div style={{ paddingTop: '114px' }}> {/* Adjust this value based on the combined height of the search bar and menu */}
+            </div>
+        </>
     )
 }
 
