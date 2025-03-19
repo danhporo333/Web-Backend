@@ -155,6 +155,16 @@ const fetchAllCategoryAPI = () => {
     return axios.get(URL_BACKEND);
 }
 
+const searchProductsAPI = (query) => {
+    const URL_BACKEND = `/v2/api/products/search?name=${encodeURIComponent(query)}`;
+    return axios.get(URL_BACKEND);
+}
+
+const fetchAllProductsByCategoryAPI = (categoryId) => {
+    const URL_BACKEND = `/v2/api/product/category/${categoryId}`;
+    return axios.get(URL_BACKEND);
+}
+
 export {
     createUserAPI,
     updateUserAPI,
@@ -174,5 +184,7 @@ export {
     createProductAPI,
     updateProductAPI,
     deleteProductAPI,
-    fetchAllCategoryAPI
+    fetchAllCategoryAPI,
+    searchProductsAPI,
+    fetchAllProductsByCategoryAPI,
 }

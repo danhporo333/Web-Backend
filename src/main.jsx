@@ -16,6 +16,7 @@ import ProductDetail from './pages/productDetail.jsx';
 import CartPage from './pages/CartPage';
 import PrivateRoute from './pages/private.rout.jsx';
 import AdminRoute from './components/routes/AdminRoute.jsx';
+import SearchResults from './pages/SearchResults.jsx';
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
           <PrivateRoute>
             <CartPage />
           </PrivateRoute>
+      },
+      {
+        path: "/search",
+        element: <SearchResults />
       }
     ]
   },

@@ -9,6 +9,7 @@
 .home-content {
     max-width: 1200px;
     width: 100%;
+    display: flex;
 }
 
 .home-title {
@@ -147,6 +148,75 @@
     height: 50vh;
 }
 
+.category-sidebar {
+    width: 250px;
+    min-width: 250px;
+    height: fit-content;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+    position: sticky;
+    top: 114px;  /* Match the header height */
+}
+
+.category-title {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #eee;
+}
+
+.category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: calc(100vh - 250px); /* Adjust based on your needs */
+    overflow-y: auto;
+}
+
+.category-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.category-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.category-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.category-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.category-item {
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #666;
+}
+
+.category-item:hover {
+    background-color: #f5f5f5;
+    color: #161414;
+}
+
+.category-item.active {
+    background-color: #161414;
+    color: white;
+}
+
+.products-section {
+    flex: 1;
+}
+
 @media (max-width: 1200px) {
     .product-card {
         width: calc(33.33% - 20px);
@@ -157,10 +227,148 @@
     .product-card {
         width: calc(50% - 20px);
     }
+
+    .home-content {
+        flex-direction: column;
+    }
+
+    .category-sidebar {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
 }
 
 @media (max-width: 480px) {
     .product-card {
         width: 100%;
     }
+}
+
+.search-results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    padding: 20px;
+}
+
+.search-result-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.search-result-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.card-image-container {
+    position: relative;
+    padding-top: 75%;
+    overflow: hidden;
+}
+
+.card-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.search-result-card:hover .card-overlay {
+    opacity: 1;
+}
+
+.search-result-card:hover .card-image {
+    transform: scale(1.1);
+}
+
+.view-details-btn {
+    padding: 10px 20px;
+    background: white;
+    color: #161414;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.view-details-btn:hover {
+    background: #161414;
+    color: white;
+}
+
+.card-info {
+    padding: 15px;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 2.8em;
+}
+
+.card-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.card-price {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #e53935;
+}
+
+.card-stock {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.card-category {
+    color: #888;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .search-results-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 15px;
+        padding: 10px;
+    }
+}
+
+.search-content {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
