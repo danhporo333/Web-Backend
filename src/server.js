@@ -19,8 +19,6 @@ app.use(cors());//Cho phép tất cả nguồn gọi API
 app.use(express.json()) // for json
 app.use(express.urlencoded({ extended: true })) // for form data
 
-
-
 //khai báo route
 app.use('/v2/api/', apiRoutes);// thêm tiền tố để biết đang gọi api
 

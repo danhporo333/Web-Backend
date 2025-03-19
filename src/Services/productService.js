@@ -93,22 +93,42 @@ export const getProductsByCategory = async (categoryId) => {
     }
 };
 
-export const searchProducts = async (name, categoryId) => {
+export const searchProducts = async (name, categoryId, categoryName) => {
     try {
         const whereClause = {};
+        const categoryWhereClause = {};
+        
+        // Tìm theo tên sản phẩm
         if (name) {
             whereClause.name = { [db.Sequelize.Op.like]: `%${name}%` };
         }
+        
+        // Tìm theo ID danh mục
         if (categoryId) {
             whereClause.categoryId = categoryId;
         }
 
+        // Tìm theo tên danh mục
+        if (categoryName) {
+            categoryWhereClause.name = { [db.Sequelize.Op.like]: `%${categoryName}%` };
+        }
+
         const products = await db.Product.findAll({
             where: whereClause,
+            include: [{
+                model: db.Category,
+                attributes: ['id', 'name', 'description'],
+                where: Object.keys(categoryWhereClause).length > 0 ? categoryWhereClause : undefined
+            }],
             attributes: ['id', 'name', 'description', 'price', 'stock', 'image']
         });
-        return products;
+
+        return {
+            productCount: products.length,
+            products: products
+        };
     } catch (error) {
+        console.error("Error searching products:", error);
         throw error;
     }
 };

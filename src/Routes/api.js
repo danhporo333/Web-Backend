@@ -11,7 +11,7 @@ import {
 import { uploadFileController } from "../Controller/fileController.js";
 import {
     createCategoryController, getAllCategoriesController,
-    deleteCategoryController, updateCategoryController
+    deleteCategoryController, updateCategoryController, 
 } from "../Controller/categoryController.js";
 
 import {
@@ -39,7 +39,7 @@ routerAPI.get('/verify-token', verifyTokenController);
 
 // Api cho category
 routerAPI.post("/category", verifyToken, checkRole(['Admin']), createCategoryController);
-routerAPI.get('/category-all', verifyToken, checkRole(['Admin', 'staff']), getAllCategoriesController);
+routerAPI.get('/category-all', getAllCategoriesController);
 routerAPI.delete('/delete-category', verifyToken, checkRole(['Admin']), deleteCategoryController);
 routerAPI.put('/update-category', verifyToken, checkRole(['Admin', 'staff']), updateCategoryController);
 
@@ -48,7 +48,7 @@ routerAPI.post('/product', verifyToken, checkRole(['Admin']), createProductContr
 routerAPI.get('/product-all', getAllProductsController);
 routerAPI.get('/product/:id', getProductByIdController);
 routerAPI.get('/product/category/:categoryId', getProductsByCategoryController);
-routerAPI.get('/product/search', searchProductsController); // Thêm route mới này
+routerAPI.get('/products/search', searchProductsController); // Thêm route cho tìm kiếm sản phẩm
 routerAPI.delete('/delete-product/:id', verifyToken, checkRole(['Admin']), deleteProductController);
 routerAPI.put('/update-product', verifyToken, checkRole(['Admin', 'staff']), updateProductController);
 

@@ -170,18 +170,22 @@ export const getProductsByCategoryController = async (req, res) => {
 
 export const searchProductsController = async (req, res) => {
     try {
-        const { name, categoryId } = req.query;
-        const products = await searchProducts(name, categoryId);
+        const { name, categoryId, categoryName } = req.query;
+        const result = await searchProducts(name, categoryId, categoryName);
+        
         return res.status(200).json({
             errorCode: 0,
-            message: 'Thành công!',
-            data: products
+            message: 'Tìm kiếm thành công!',
+            data: {
+                productCount: result.productCount,
+                products: result.products
+            }
         });
     } catch (error) {
-        console.error("Lỗi khi tìm kiếm sản phẩm:", error);
+        console.error("❌ Error searching products:", error);
         return res.status(500).json({
             errorCode: 1,
-            message: 'Lỗi máy chủ! Không thể tìm kiếm sản phẩm.'
+            message: 'Lỗi server khi tìm kiếm sản phẩm!'
         });
     }
 };
