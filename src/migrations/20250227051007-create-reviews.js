@@ -33,7 +33,9 @@ module.exports = {
       },
       comment: {
         type: Sequelize.TEXT,
-        allowNull: true
+        allowNull: true,
+        charset: 'utf8mb4',
+        collate: 'utf8mb4_unicode_ci'
       },
       createdAt: {
         allowNull: false,

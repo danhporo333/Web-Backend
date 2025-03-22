@@ -18,6 +18,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Category',
+    charset: 'utf8mb4',
+    collate: 'utf8mb4_unicode_ci'
   });
   return Category;
 };

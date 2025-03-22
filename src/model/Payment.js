@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Payment.belongsTo(models.User, { foreignKey: 'userId' });
       Payment.belongsTo(models.Order, { foreignKey: 'orderId' });
+      Payment.belongsTo(models.Address, { foreignKey: 'addressId' });
     }
   }
   Payment.init({
@@ -16,8 +17,21 @@ module.exports = (sequelize, DataTypes) => {
     },
     userId: DataTypes.UUID,
     orderId: DataTypes.UUID,
+    addressId: {
+      type: DataTypes.UUID,
+      references: {
+        model: 'Addresses',
+        key: 'id'
+      }
+    },
     amount: DataTypes.FLOAT,
-    paymentMethod: DataTypes.STRING,
+    paymentMethod: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isIn: [['cod', 'vietqr']]
+      }
+    },
     status: DataTypes.STRING,
     paymentDate: {
       type: DataTypes.DATE,

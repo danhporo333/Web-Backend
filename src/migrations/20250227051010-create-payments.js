@@ -27,6 +27,15 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
+      addressId: {
+        type: Sequelize.UUID,
+        references: {
+          model: 'Addresses',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
+      },
       amount: {
         type: Sequelize.FLOAT,
         allowNull: false

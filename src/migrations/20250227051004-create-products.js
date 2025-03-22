@@ -15,7 +15,9 @@ module.exports = {
       },
       description: {
         type: Sequelize.TEXT,
-        allowNull: false
+        allowNull: false,
+        charset: 'utf8mb4',
+        collate: 'utf8mb4_unicode_ci'
       },
       price: {
         type: Sequelize.FLOAT,

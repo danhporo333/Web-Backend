@@ -18,6 +18,14 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
+      recipientName: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      phoneNumber: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       addressLine1: {
         type: Sequelize.STRING,
         allowNull: false
@@ -32,15 +40,7 @@ module.exports = {
       },
       state: {
         type: Sequelize.STRING,
-        allowNull: false
-      },
-      postalCode: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      country: {
-        type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       createdAt: {
         allowNull: false,

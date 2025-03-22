@@ -5,6 +5,7 @@ export const createRoleController = async (req, res) => {
 
     try {
         const result = await createRole(name, description);
+        console.log(result);
         return res.status(201).json({
             errorCode: 0,
             message: 'Role created successfully!',

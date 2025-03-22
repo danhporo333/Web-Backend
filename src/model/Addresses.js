@@ -14,12 +14,24 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     userId: DataTypes.UUID,
-    addressLine1: DataTypes.STRING,
+    recipientName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    phoneNumber: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    addressLine1: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     addressLine2: DataTypes.STRING,
-    city: DataTypes.STRING,
+    city: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     state: DataTypes.STRING,
-    postalCode: DataTypes.STRING,
-    country: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Address',

@@ -33,6 +33,9 @@ import {
     updateCartController
 } from "../Controller/cartController.js";
 
+import { checkoutOrderController, getOrderDetailsController } from '../Controller/orderController.js';
+import { generateVietQRController } from '../Controller/paymmentController.js';
+
 routerAPI.post('/login', Login);
 routerAPI.post('/register', register);
 routerAPI.get('/verify-token', verifyTokenController);
@@ -53,14 +56,14 @@ routerAPI.delete('/delete-product/:id', verifyToken, checkRole(['Admin']), delet
 routerAPI.put('/update-product', verifyToken, checkRole(['Admin', 'staff']), updateProductController);
 
 //Api cho user 
-routerAPI.post('/create-user', createUserController);
+routerAPI.post('/create-user', verifyToken, checkRole(['Admin']), createUserController);
 routerAPI.get('/user-all', verifyToken, checkRole(['Admin']), getAllUsersController);
 routerAPI.delete('/delete-user/:id', verifyToken, checkRole(['Admin']), deleteUserController);
 routerAPI.put('/update-user', verifyToken, checkRole(['Admin']), updateUserController);
 routerAPI.post('/file', uploadFileController);
 
 //Api cho role
-routerAPI.post('/create-role', verifyToken, checkRole(['Admin']), createRoleController);
+routerAPI.post('/create-role',  verifyToken, checkRole(['Admin']), createRoleController);
 routerAPI.get('/role-all', getAllRolesController);
 routerAPI.delete('/delete-role', verifyToken, checkRole(['Admin']), deleteRoleController);
 routerAPI.put('/update-role', verifyToken, checkRole(['Admin']), updateRoleController);
@@ -72,5 +75,11 @@ routerAPI.get('/cart/items', verifyToken, getCartItemsController); // Add this n
 routerAPI.delete('/cart/delete/:cartItemId', verifyToken, removeFromCartController);
 routerAPI.put('/cart/update/:cartItemId', verifyToken, updateCartController);
 
+// Api cho order
+routerAPI.post('/order/checkout', verifyToken, checkoutOrderController);
+routerAPI.get('/order/:orderId', verifyToken, getOrderDetailsController);
+
+// API cho thanh toán bằng QR Code
+routerAPI.post('/payment/vietqr', verifyToken, generateVietQRController);
 
 module.exports = routerAPI;
