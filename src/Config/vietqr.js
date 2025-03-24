@@ -1,8 +1,10 @@
 export const vietQRConfig = {
-  // Thông tin ngân hàng của bạn 
-  bankId: "970415", // VD: NCB: 970422
-  accountNo: "113366668888",
-  accountName: "DOAN VAN HAI",
-  bankName: "VIETINBANK",
-  template: "compact" // hoặc "compact2"
+    apiUrl: "https://api.vietqr.io/v2/generate",
+    clientId: "YOUR_CLIENT_ID", // Thêm client ID từ VietQR
+    apiKey: "YOUR_API_KEY",     // Thêm API key từ VietQR
+    bankId: "970415",           // VietinBank BIN
+    accountNo: "104873246142",
+    accountName: "DOAN VAN HAI",
+    bankName: "VIETINBANK",
+    template: "compact"
 };

@@ -34,7 +34,7 @@ import {
 } from "../Controller/cartController.js";
 
 import { checkoutOrderController, getOrderDetailsController } from '../Controller/orderController.js';
-import { generateVietQRController } from '../Controller/paymmentController.js';
+import { generateVietQRController, checkPaymentStatusController } from '../Controller/paymmentController.js';
 
 routerAPI.post('/login', Login);
 routerAPI.post('/register', register);
@@ -75,11 +75,13 @@ routerAPI.get('/cart/items', verifyToken, getCartItemsController); // Add this n
 routerAPI.delete('/cart/delete/:cartItemId', verifyToken, removeFromCartController);
 routerAPI.put('/cart/update/:cartItemId', verifyToken, updateCartController);
 
+// API payment routes
+routerAPI.post('/payment/vietqr', verifyToken, generateVietQRController);
+routerAPI.get('/payment/:orderId/status', verifyToken, checkPaymentStatusController);
+
 // Api cho order
 routerAPI.post('/order/checkout', verifyToken, checkoutOrderController);
 routerAPI.get('/order/:orderId', verifyToken, getOrderDetailsController);
 
-// API cho thanh toán bằng QR Code
-routerAPI.post('/payment/vietqr', verifyToken, generateVietQRController);
 
 module.exports = routerAPI;

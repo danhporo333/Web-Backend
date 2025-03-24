@@ -1,30 +1,24 @@
-import QRCode from 'qrcode';
+import { vietQRConfig } from '../Config/vietqr.js';
 
-export const generateVietQRCode = async (orderData) => {
+export const generateVietQRCode = async ({ orderId, amount }) => {
     try {
-        const qrData = {
-            accountNo: "113366668888", 
-            accountName: "NGUYEN VAN A", 
-            acqId: "970415",  // Mã ngân hàng VIETINBANK
-            bankName: "VIETINBANK",
-            amount: orderData.totalAmount,
-            addInfo: `Thanh toan don hang ${orderData.orderId}`,
-            template: "compact"
-        };
-
-        // Tạo URL QR theo định dạng VietQR 
-        const qrUrl = `https://img.vietqr.io/image/${qrData.acqId}-${qrData.accountNo}-${qrData.template}.png?amount=${qrData.amount}&addInfo=${qrData.addInfo}&accountName=${qrData.accountName}`;
+        const encodedAccountName = encodeURIComponent(vietQRConfig.accountName);
+        const encodedDescription = encodeURIComponent(`thanh toan don hang ${orderId}`);
         
+        const qrUrl = `https://img.vietqr.io/image/${vietQRConfig.bankId}-${vietQRConfig.accountNo}-${vietQRConfig.template}.png?amount=${amount}&addInfo=${encodedDescription}&accountName=${encodedAccountName}`;
+
         return {
             qrUrl: qrUrl,
+            amount: amount,
             bankInfo: {
-                bankName: qrData.bankName,
-                accountNo: qrData.accountNo,
-                accountName: qrData.accountName,
-                amount: qrData.amount
-            }
+                bankId: vietQRConfig.bankId,
+                accountNo: vietQRConfig.accountNo,
+                accountName: vietQRConfig.accountName,
+                bankName: vietQRConfig.bankName
+            },
+            transferContent: `thanh toan don hang ${orderId}'}`
         };
     } catch (error) {
-        throw error;
+        throw new Error('Failed to generate VietQR code: ' + error.message);
     }
 };

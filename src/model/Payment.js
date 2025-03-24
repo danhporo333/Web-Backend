@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isIn: [['cod', 'vietqr']]
+        isIn: [['cod', 'vietqr']] // Thêm 'cod' vào danh sách các phương thức thanh toán hợp lệ
       }
     },
     status: DataTypes.STRING,

@@ -1,48 +1,38 @@
 import db from '../model/index.js';
-import { createOrder, getOrderDetails } from '../Services/orderService.js';
-import { generateVietQRCode } from '../Services/VietQRservice.js';
+import { createOrder } from '../Services/orderService.js';
 import { processPayment } from '../Services/paymentService.js';
 
 export const checkoutOrderController = async (req, res) => {
     try {
         const userId = req.user.userId;
-        const {paymentMethod, recipientName, phoneNumber, addressLine1, addressLine2, city, state} = req.body;
+        const {paymentMethod, recipientName, phoneNumber, addressLine1, city} = req.body;
         
+        // Create shipping address
         const address = await db.Address.create({
             recipientName,
             phoneNumber,
             addressLine1,
-            addressLine2,
             city,
-            state,
             userId
         });
 
+        // Create order
         const order = await createOrder(userId, address.id);
-        const payment = await processPayment(order.id, paymentMethod, address.id, userId);
+        
+        // Process payment
+        const paymentResult = await processPayment(order.id, paymentMethod, address.id, userId);
 
         let responseData = {
             orderId: order.id,
             totalAmount: order.totalAmount,
             paymentMethod: paymentMethod,
-            paymentStatus: payment.status,
+            paymentStatus: paymentResult.payment.status,
             shippingAddress: address
         };
 
-        // Nếu thanh toán qua VIETQR
-        if (paymentMethod === 'vietqr') {
-            const qrData = await generateVietQRCode({
-                orderId: order.id,
-                totalAmount: order.totalAmount
-            });
-            
-            responseData.qrPayment = qrData;
-            responseData.paymentInstructions = [
-                "1. Mở ứng dụng Mobile Banking",
-                "2. Quét mã QR hoặc tải hình ảnh QR",
-                "3. Kiểm tra thông tin và xác nhận thanh toán",
-                "4. Đơn hàng sẽ được xử lý sau khi nhận được thanh toán"
-            ];
+        // Add QR data if payment method is VietQR
+        if (paymentMethod === 'vietqr' && paymentResult.qrPayment) {  // Changed from qrData to qrPayment
+            responseData.qrPayment = paymentResult.qrPayment;
         }
 
         return res.status(200).json({

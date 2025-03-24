@@ -1,16 +1,14 @@
 import { vietQRConfig } from '../Config/vietqr.js';
 import db from '../model/index.js';
+import { generateVietQRCode } from './VietQRservice.js';
 
-export const createVietQRUrl = async ({ amount, orderId, description }) => {
+export const createVietQRUrl = async ({ amount, orderId }) => {
     try {
-        // Tạo URL VietQR
-        const vietQrUrl = `https://api.vietqr.io/image/${vietQRConfig.bankId}/${vietQRConfig.accountNo}/${amount}/${description}/${vietQRConfig.template}`;
-
         // Lưu thông tin thanh toán
         await db.Payment.create({
             orderId: orderId,
             amount: amount,
-            paymentMethod: 'VIETQR',
+            paymentMethod: 'vietqr',
             status: 'pending'
         });
 
@@ -30,10 +28,17 @@ export const processPayment = async (orderId, paymentMethod, addressId, userId) 
         }
 
         let paymentStatus = 'pending';
-        if (paymentMethod === 'COD') {
+        let qrPayment = null;
+
+        if (paymentMethod === 'cod') {
             paymentStatus = 'pending';
-        } else if (paymentMethod === 'VIETQR') {
+        } else if (paymentMethod === 'vietqr') {
             paymentStatus = 'processing';
+            // Generate QR code for VietQR payment
+            qrPayment = await generateVietQRCode({
+                orderId: orderId,
+                amount: order.totalAmount
+            });
         }
 
         const payment = await db.Payment.create({
@@ -47,7 +52,10 @@ export const processPayment = async (orderId, paymentMethod, addressId, userId) 
 
         await order.update({ status: 'processing' });
 
-        return payment;
+        return {
+            payment,
+            qrPayment  // Return QR payment data
+        };
     } catch (error) {
         throw error;
     }
