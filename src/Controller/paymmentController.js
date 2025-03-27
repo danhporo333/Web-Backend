@@ -4,7 +4,6 @@ import db from '../model/index.js';
 export const generateVietQRController = async (req, res) => {
     try {
         const { amount, orderId } = req.body;
-        console.log("Generating QR for order:", orderId);
         const userId = req.user.userId;
 
         // Tạo QR code cho thanh toán tạm thời (preview)
